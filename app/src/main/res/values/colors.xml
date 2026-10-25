@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ============================================== -->
+    <!-- Material 3 Expressive — Blue Tonal Dark Theme  -->
+    <!-- Seed: #0061A4 (Blue)  HCT color space           -->
+    <!-- ============================================== -->
+
+    <!-- Primary -->
+    <color name="m3_primary">#9ECAFF</color>
+    <color name="m3_on_primary">#00325B</color>
+    <color name="m3_primary_container">#00497D</color>
+    <color name="m3_on_primary_container">#CFE5FF</color>
+
+    <!-- Secondary -->
+    <color name="m3_secondary">#BBC7DB</color>
+    <color name="m3_on_secondary">#243041</color>
+    <color name="m3_secondary_container">#3B4658</color>
+    <color name="m3_on_secondary_container">#D7E3F7</color>
+
+    <!-- Tertiary -->
+    <color name="m3_tertiary">#D6BEE4</color>
+    <color name="m3_on_tertiary">#3B2947</color>
+    <color name="m3_tertiary_container">#523F5F</color>
+    <color name="m3_on_tertiary_container">#F3DAFF</color>
+
+    <!-- Error -->
+    <color name="m3_error">#FFB4AB</color>
+    <color name="m3_on_error">#690005</color>
+    <color name="m3_error_container">#93000A</color>
+    <color name="m3_on_error_container">#FFDAD6</color>
+
+    <!-- Surface -->
+    <color name="m3_surface">#111318</color>
+    <color name="m3_surface_dim">#111318</color>
+    <color name="m3_surface_bright">#36393E</color>
+    <color name="m3_surface_container_lowest">#0B0E13</color>
+    <color name="m3_surface_container_low">#191C20</color>
+    <color name="m3_surface_container">#1D2024</color>
+    <color name="m3_surface_container_high">#272A2E</color>
+    <color name="m3_surface_container_highest">#323539</color>
+
+    <!-- On Surface -->
+    <color name="m3_on_surface">#E2E2E6</color>
+    <color name="m3_on_surface_variant">#C2C7CE</color>
+
+    <!-- Outline -->
+    <color name="m3_outline">#8A9198</color>
+    <color name="m3_outline_variant">#404850</color>
+
+    <!-- Inverse -->
+    <color name="m3_inverse_surface">#E2E2E6</color>
+    <color name="m3_inverse_on_surface">#2F3135</color>
+    <color name="m3_inverse_primary">#0061A4</color>
+
+    <!-- Scrim -->
+    <color name="m3_scrim">#000000</color>
+    <color name="m3_scrim_overlay">#CC000000</color>
+
+    <!-- ============================================== -->
+    <!-- Semantic Aliases for Launcher Components       -->
+    <!-- ============================================== -->
+
+    <!-- Text hierarchy (mapped to M3 on-surface roles) -->
+    <color name="m3_text_primary">#E2E2E6</color>
+    <color name="m3_text_secondary">#C2C7CE</color>
+    <color name="m3_text_muted">#8A9198</color>
+
+    <!-- Focus Ring (M3 Primary) -->
+    <color name="m3_focus_ring">#FFFFFF</color>
+    <color name="m3_focus_halo">#35FFFFFF</color>
+
+    <!-- Chip / Badge (M3 Secondary Container) -->
+    <color name="m3_badge_bg">#3B4658</color>
+    <color name="m3_badge_text">#D7E3F7</color>
+    <color name="m3_chip_bg">#272A2E</color>
+    <color name="m3_chip_bg_focused">#35FFFFFF</color>
+
+    <!-- Status -->
+    <color name="m3_status_green">#81C784</color>
+    <color name="m3_status_amber">#FFB74D</color>
+    <color name="m3_recents_scrim">#DD0B0E13</color>
+
+    <!-- Compatibility Aliases -->
+    <color name="black">#111318</color>
+    <color name="dock_bg">#1D2024</color>
+    <color name="dock_border">#404850</color>
+    <color name="pill_bg">#272A2E</color>
+    <color name="pill_bg_focused">#30FFFFFF</color>
+    <color name="text_primary">#E2E2E6</color>
+    <color name="text_secondary">#C2C7CE</color>
+    <color name="text_muted">#8A9198</color>
+    <color name="dropdown_bg">#323539</color>
+</resources>

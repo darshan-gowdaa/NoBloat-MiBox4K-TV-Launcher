@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Focused: Clean Liquid Glass Refraction with Slim 1.5dp Halo & 1.2dp Core Rim -->
+    <item android:state_focused="true">
+        <layer-list>
+            <!-- Luminous Specular Halo -->
+            <item>
+                <shape android:shape="rectangle">
+                    <corners android:radius="40dp" />
+                    <stroke
+                        android:width="1.5dp"
+                        android:color="#35FFFFFF" />
+                </shape>
+            </item>
+            <!-- Luminous Liquid Glass Core: Specular Top Highlight + Refractive Tint + Focus Rim -->
+            <item>
+                <shape android:shape="rectangle">
+                    <corners android:radius="40dp" />
+                    <gradient
+                        android:angle="270"
+                        android:startColor="#65FFFFFF"
+                        android:centerColor="#28FFFFFF"
+                        android:endColor="#14FFFFFF"
+                        android:type="linear" />
+                    <stroke
+                        android:width="1.2dp"
+                        android:color="#FFFFFFFF" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+    <!-- Activated (Modal open / child active) -->
+    <item android:state_activated="true">
+        <layer-list>
+            <!-- Capsule Active Specular Halo -->
+            <item>
+                <shape android:shape="rectangle">
+                    <corners android:radius="40dp" />
+                    <stroke
+                        android:width="1.2dp"
+                        android:color="#25FFFFFF" />
+                </shape>
+            </item>
+            <!-- Active Liquid Glass Core -->
+            <item>
+                <shape android:shape="rectangle">
+                    <corners android:radius="40dp" />
+                    <gradient
+                        android:angle="270"
+                        android:startColor="#45FFFFFF"
+                        android:centerColor="#20FFFFFF"
+                        android:endColor="#10FFFFFF"
+                        android:type="linear" />
+                    <stroke
+                        android:width="1.0dp"
+                        android:color="#50FFFFFF" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+    <!-- Default Unfocused: Apple VisionOS Liquid Glass with Top Specular Sheen & Optical Frosted Rim -->
+    <item>
+        <layer-list>
+            <!-- Caustic Acrylic Underlay -->
+            <item>
+                <shape android:shape="rectangle">
+                    <corners android:radius="40dp" />
+                    <solid android:color="#14000000" />
+                </shape>
+            </item>
+            <!-- Refractive Specular Gradient & Crisp Glass Rim -->
+            <item>
+                <shape android:shape="rectangle">
+                    <corners android:radius="40dp" />
+                    <gradient
+                        android:angle="270"
+                        android:startColor="#45FFFFFF"
+                        android:centerColor="#1EFFFFFF"
+                        android:endColor="#0EFFFFFF"
+                        android:type="linear" />
+                    <stroke
+                        android:width="1.2dp"
+                        android:color="#55FFFFFF" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

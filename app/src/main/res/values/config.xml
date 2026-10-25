@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="columns">5</integer>
+    <string-array name="dock_apps">
+        <item>io.gh.reisxd.tizentube.cobalt</item>
+        <item>com.stremio.one</item>
+        <item>org.videolan.vlc</item>
+        <item>com.tcl.browser</item>
+        <item>com.shubh.anililitv</item>
+    </string-array>
+</resources>

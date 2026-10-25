@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="180dp"
+    android:viewportWidth="320"
+    android:viewportHeight="180">
+
+    <!-- 16:9 Leanback Banner Background -->
+    <path
+        android:fillColor="#10141D"
+        android:pathData="M0,0h320v180h-320z" />
+
+    <!-- Subtle Diagonal Tonal Accent -->
+    <path
+        android:fillColor="#00497D"
+        android:pathData="M0,0L140,0L90,180L0,180z" />
+
+    <!-- Centered TV Display Emblem -->
+    <path
+        android:fillColor="#1B2230"
+        android:strokeColor="#9ECAFF"
+        android:strokeWidth="3"
+        android:strokeLineJoin="round"
+        android:pathData="M110,40h100c4,0 8,4 8,8v64c0,4 -4,8 -8,8h-100c-4,0 -8,-4 -8,-8v-64c0,-4 4,-8 8,-8z" />
+
+    <!-- Home Icon Inside Display -->
+    <path
+        android:fillColor="#9ECAFF"
+        android:pathData="M160,56L138,74h8v24h28v-24h8z" />
+
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M156,84h8v8h-8z" />
+
+    <!-- TV Stand -->
+    <path
+        android:fillColor="#9ECAFF"
+        android:pathData="M152,120h16v6h-16z M144,126h32v4h-32z" />
+</vector>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Focused: Clean Liquid Glass with Thin 1.2dp White Rim, Zero Heavy Blue Fill -->
+    <item android:state_focused="true">
+        <shape android:shape="oval">
+            <solid android:color="#35FFFFFF" />
+            <stroke
+                android:width="1.2dp"
+                android:color="#FFFFFFFF" />
+        </shape>
+    </item>
+    <!-- Default Unfocused: Subtle Translucent Glass -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#18FFFFFF" />
+            <stroke
+                android:width="1dp"
+                android:color="#30FFFFFF" />
+        </shape>
+    </item>
+</selector>

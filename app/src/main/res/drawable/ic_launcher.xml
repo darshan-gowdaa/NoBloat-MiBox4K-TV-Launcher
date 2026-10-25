@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Material 3 Squircle Base -->
+    <path
+        android:fillColor="#10141D"
+        android:pathData="M18,6h72c6.6,0 12,5.4 12,12v72c0,6.6 -5.4,12 -12,12h-72c-6.6,0 -12,-5.4 -12,-12v-72c0,-6.6 5.4,-12 12,-12z" />
+
+    <!-- Tonal Primary Glow Container -->
+    <path
+        android:fillColor="#00497D"
+        android:pathData="M24,14h60c5.5,0 10,4.5 10,10v60c0,5.5 -4.5,10 -10,10h-60c-5.5,0 -10,-4.5 -10,-10v-60c0,-5.5 4.5,-10 10,-10z" />
+
+    <!-- TV Display Frame Geometry -->
+    <path
+        android:fillColor="#1B2230"
+        android:strokeColor="#9ECAFF"
+        android:strokeWidth="2.5"
+        android:strokeLineJoin="round"
+        android:pathData="M26,30h56c3.3,0 6,2.7 6,6v34c0,3.3 -2.7,6 -6,6h-56c-3.3,0 -6,-2.7 -6,-6v-34c0,-3.3 2.7,-6 6,-6z" />
+
+    <!-- Modern Expressive Home / TV Apex Emblem -->
+    <path
+        android:fillColor="#9ECAFF"
+        android:pathData="M54,40L38,53h6v17h20v-17h6z" />
+
+    <!-- Interior Accent Dot -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M51,60h6v6h-6z" />
+
+    <!-- TV Stand -->
+    <path
+        android:fillColor="#9ECAFF"
+        android:pathData="M48,76h12v4h-12z M42,80h24v3h-24z" />
+</vector>

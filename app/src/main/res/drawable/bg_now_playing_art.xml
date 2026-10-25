@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Focused: Borderless, Concentric 40dp Radius Matching Outer 46dp Pill -->
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="40dp" />
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+    <!-- Default: Borderless, Concentric 40dp Radius Matching Outer 46dp Pill -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="40dp" />
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+</selector>

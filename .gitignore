@@ -1,0 +1,23 @@
+# Build outputs
+build/
+build_out/
+*.apk
+*.idsig
+
+# Gradle & IDE
+.gradle/
+.idea/
+*.iml
+*.iws
+*.ipr
+.project
+.classpath
+.settings/
+local.properties
+.DS_Store
+
+# Temporary & Logs
+*.log
+*.tmp
+capture/
+screenshot*.png

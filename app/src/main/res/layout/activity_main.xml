@@ -1,0 +1,1043 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:background="@color/m3_surface">
+
+    <!-- Material 3 Dynamic Ambient Mesh / Apple Music Style Living Fluid Moving Gradient -->
+    <com.appletv.launcher.AppleMusicGradientView
+        android:id="@+id/apple_music_gradient_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Main Scrollable Content -->
+    <ScrollView
+        android:id="@+id/main_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="178dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:requiresFadingEdge="vertical"
+        android:fadingEdgeLength="28dp"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/scroll_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:paddingStart="56dp"
+            android:paddingTop="20dp"
+            android:paddingEnd="56dp"
+            android:paddingBottom="60dp">
+
+            <!-- Section 1: Favorites / Pinned Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_favorites_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_star"
+                    android:drawablePadding="8dp"
+                    android:text="Favorites"
+                    android:textColor="@color/m3_text_primary"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.03"
+                    android:shadowColor="#CC000000"
+                    android:shadowDx="0"
+                    android:shadowDy="1.5"
+                    android:shadowRadius="4" />
+            </LinearLayout>
+
+            <GridLayout
+                android:id="@+id/grid_dock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:columnCount="5"
+                android:orientation="horizontal" />
+
+            <!-- Section 2: All Apps Grid -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_all_apps_header"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_apps"
+                    android:drawablePadding="8dp"
+                    android:text="All Apps"
+                    android:textColor="@color/m3_text_primary"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.03"
+                    android:shadowColor="#CC000000"
+                    android:shadowDx="0"
+                    android:shadowDy="1.5"
+                    android:shadowRadius="4" />
+            </LinearLayout>
+
+            <GridLayout
+                android:id="@+id/grid_apps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:columnCount="5"
+                android:orientation="horizontal" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Dynamic Header Scrim (Fades in ONLY during scroll to occlude passing cards) -->
+    <View
+        android:id="@+id/view_header_scrim"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:layout_gravity="top"
+        android:elevation="14dp"
+        android:alpha="0" />
+
+    <!-- Pinned Top Header Container (Clock, Pills, Spotlight Title) -->
+    <LinearLayout
+        android:id="@+id/layout_pinned_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"
+        android:layout_gravity="top"
+        android:elevation="16dp"
+        android:orientation="vertical">
+
+        <!-- Top M3 Expressive Bar -->
+        <LinearLayout
+            android:id="@+id/top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="56dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <!-- Left: M3 Expressive Clock Widget & Date -->
+            <LinearLayout
+                android:id="@+id/header_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_clock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?android:attr/selectableItemBackgroundBorderless"
+                    android:text="9:55"
+                    android:textColor="@color/m3_text_primary"
+                    android:textSize="44sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:includeFontPadding="false"
+                    android:letterSpacing="-0.01"
+                    android:shadowColor="#E0000000"
+                    android:shadowDx="0"
+                    android:shadowDy="3"
+                    android:shadowRadius="6" />
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="Sunday, October 25"
+                    android:textColor="@color/m3_text_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:shadowColor="#E6000000"
+                    android:shadowDx="0"
+                    android:shadowDy="2"
+                    android:shadowRadius="5" />
+            </LinearLayout>
+
+            <!-- Flexible Spacer -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <!-- Right: Material 3 Liquid Glass Status Pills: 1. Wi-Fi, 2. Bluetooth, 3. RAM, 4. Settings -->
+            <LinearLayout
+                android:id="@+id/header_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/btn_wifi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_pill"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:drawableStart="@drawable/ic_wifi"
+                    android:drawablePadding="8dp"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:text="Wi-Fi"
+                    android:textColor="@color/m3_text_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:shadowColor="#CC000000"
+                    android:shadowDx="0"
+                    android:shadowDy="1"
+                    android:shadowRadius="3" />
+
+                <TextView
+                    android:id="@+id/btn_bluetooth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_pill"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:drawableStart="@drawable/ic_bluetooth"
+                    android:drawablePadding="8dp"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:text="Ready"
+                    android:textColor="@color/m3_text_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:shadowColor="#CC000000"
+                    android:shadowDx="0"
+                    android:shadowDy="1"
+                    android:shadowRadius="3" />
+
+                <TextView
+                    android:id="@+id/btn_metrics"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_pill"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:drawableStart="@drawable/ic_memory"
+                    android:drawablePadding="8dp"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:text="886M Free  |  1.9G"
+                    android:textColor="@color/m3_text_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:shadowColor="#CC000000"
+                    android:shadowDx="0"
+                    android:shadowDy="1"
+                    android:shadowRadius="3" />
+
+                <TextView
+                    android:id="@+id/btn_settings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:background="@drawable/bg_pill"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:drawableStart="@drawable/ic_settings"
+                    android:drawablePadding="8dp"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:text="Settings"
+                    android:textColor="@color/m3_text_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:shadowColor="#CC000000"
+                    android:shadowDx="0"
+                    android:shadowDy="1"
+                    android:shadowRadius="3" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- M3 Expressive Spotlight Row: Left = Focused App Title, Right = Now Playing Media Capsule -->
+        <LinearLayout
+            android:id="@+id/layout_spotlight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="78dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:layout_marginStart="56dp"
+            android:layout_marginEnd="56dp"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_focused_app_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stremio"
+                android:textColor="@color/m3_text_primary"
+                android:textSize="26sp"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.02"
+                android:shadowColor="#E0000000"
+                android:shadowDx="0"
+                android:shadowDy="2"
+                android:shadowRadius="6" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <!-- Material 3 Expressive Dynamic Now Playing Media Player Capsule (Enlarged 92dp Height, 80dp Art) -->
+            <LinearLayout
+                android:id="@+id/layout_now_playing"
+                android:layout_width="wrap_content"
+                android:layout_height="92dp"
+                android:animateLayoutChanges="true"
+                android:background="@drawable/bg_pill_now_playing"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="6dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="26dp"
+                android:paddingBottom="6dp"
+                android:visibility="gone">
+
+                <!-- 1. Big Album Art Container (80x80dp, Concentric 40dp Radius Tile) -->
+                <FrameLayout
+                    android:id="@+id/container_now_playing_art"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/bg_now_playing_art"
+                    android:clipChildren="true"
+                    android:clipToPadding="false"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/iv_now_playing_art"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_music_note" />
+
+                    <!-- Translucent Glass Scrim for Visualizer Contrast -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#40000000" />
+
+                    <!-- Equalizer Visualizer Overlay (30dp tall, centered on top of album art) -->
+                    <com.appletv.launcher.widget.EqualizerView
+                        android:id="@+id/equalizer_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center" />
+                </FrameLayout>
+
+                <!-- 2. Track & Artist Info -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="18dp"
+                    android:maxWidth="260dp"
+                    android:orientation="vertical">
+
+                    <!-- Custom Paused Marquee Track Title -->
+                    <com.appletv.launcher.widget.MarqueeTextView
+                        android:id="@+id/tv_now_playing_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxWidth="250dp"
+                        android:singleLine="true"
+                        android:text="Track Title"
+                        android:textColor="@color/m3_text_primary"
+                        android:textSize="15sp"
+                        android:shadowColor="#CC000000"
+                        android:shadowDx="0"
+                        android:shadowDy="1"
+                        android:shadowRadius="3" />
+
+                    <TextView
+                        android:id="@+id/tv_now_playing_subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxWidth="250dp"
+                        android:singleLine="true"
+                        android:text="Artist • App"
+                        android:textColor="@color/m3_text_secondary"
+                        android:textSize="12.5sp"
+                        android:shadowColor="#CC000000"
+                        android:shadowDx="0"
+                        android:shadowDy="1"
+                        android:shadowRadius="3" />
+                </LinearLayout>
+
+                <!-- 3. Controls: Prev, Play/Pause, Next, Stop -->
+                <ImageView
+                    android:id="@+id/btn_now_playing_prev"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:background="@drawable/bg_media_control_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="7dp"
+                    android:src="@drawable/ic_skip_previous"
+                    android:tint="@color/m3_text_primary" />
+
+                <ImageView
+                    android:id="@+id/btn_now_playing_play"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_media_play_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="9dp"
+                    android:src="@drawable/ic_play"
+                    android:tint="@color/m3_text_primary" />
+
+                <ImageView
+                    android:id="@+id/btn_now_playing_next"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_media_control_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="7dp"
+                    android:src="@drawable/ic_skip_next"
+                    android:tint="@color/m3_text_primary" />
+
+                <ImageView
+                    android:id="@+id/btn_now_playing_stop"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/bg_media_control_button"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_media_stop"
+                    android:tint="@color/m3_text_secondary" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+    <!-- Bluetooth Device Switcher Dropdown Modal with Liquid Glass Backdrop -->
+    <FrameLayout
+        android:id="@+id/layout_bluetooth_scrim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#66000000"
+        android:clickable="true"
+        android:focusable="false"
+        android:elevation="28dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/layout_bluetooth_dialog"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:background="@drawable/bg_liquid_glass_dialog"
+            android:elevation="32dp"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_bluetooth"
+                android:drawablePadding="8dp"
+                android:text="Bluetooth Devices"
+                android:textColor="@color/m3_primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/container_bt_devices"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </ScrollView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="#25FFFFFF" />
+
+            <TextView
+                android:id="@+id/btn_open_bt_settings"
+                android:layout_width="match_parent"
+                android:layout_height="34dp"
+                android:background="@drawable/bg_m3_menu_item"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:drawableStart="@drawable/ic_settings"
+                android:drawablePadding="8dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:text="All Devices"
+                android:textColor="@color/m3_primary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Android TV Quick Settings Modal with Liquid Glass Backdrop -->
+    <FrameLayout
+        android:id="@+id/layout_settings_scrim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#66000000"
+        android:clickable="true"
+        android:focusable="false"
+        android:elevation="28dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/layout_settings_dialog"
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginEnd="56dp"
+            android:layout_marginTop="56dp"
+            android:background="@drawable/bg_liquid_glass_dialog"
+            android:elevation="32dp"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_settings"
+                android:drawablePadding="10dp"
+                android:text="TV Settings"
+                android:textColor="@color/m3_primary"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="12dp"
+                android:text="System and launcher preferences"
+                android:textColor="@color/m3_text_secondary"
+                android:textSize="12sp" />
+
+            <!-- 1. System Settings -->
+            <TextView
+                android:id="@+id/setting_item_system"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/bg_m3_menu_item"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:drawableStart="@drawable/ic_settings"
+                android:drawablePadding="10dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:text="All System Settings"
+                android:textColor="@color/m3_text_primary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <!-- 2. Network & Internet -->
+            <TextView
+                android:id="@+id/setting_item_network"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/bg_m3_menu_item"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:drawableStart="@drawable/ic_wifi"
+                android:drawablePadding="10dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:text="Network &amp; Wi-Fi"
+                android:textColor="@color/m3_text_primary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <!-- 3. Remotes & Accessories -->
+            <TextView
+                android:id="@+id/setting_item_bluetooth"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/bg_m3_menu_item"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:drawableStart="@drawable/ic_bluetooth"
+                android:drawablePadding="10dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:text="Remotes &amp; Accessories"
+                android:textColor="@color/m3_text_primary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <!-- 4. Apps & Permissions -->
+            <TextView
+                android:id="@+id/setting_item_apps"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/bg_m3_menu_item"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:drawableStart="@drawable/ic_apps"
+                android:drawablePadding="10dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:text="Apps &amp; Permissions"
+                android:textColor="@color/m3_text_primary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <!-- 5. Display & Sound -->
+            <TextView
+                android:id="@+id/setting_item_device"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/bg_m3_menu_item"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:drawableStart="@drawable/ic_tv"
+                android:drawablePadding="10dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:text="Display &amp; Sound"
+                android:textColor="@color/m3_text_primary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <!-- Separator -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                android:background="#33FFFFFF" />
+
+            <!-- 6. Toggle Ambient Drift Motion -->
+            <TextView
+                android:id="@+id/setting_item_ambient"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:background="@drawable/bg_m3_menu_item"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:drawableStart="@drawable/ic_star"
+                android:drawablePadding="10dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:text="Ambient Glow: Active"
+                android:textColor="@color/m3_primary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- App Context Menu (Long-press / Options Modal - Liquid Glass & Tile-Anchored) -->
+    <FrameLayout
+        android:id="@+id/layout_app_menu_scrim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#55050810"
+        android:clickable="true"
+        android:focusable="true"
+        android:elevation="30dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/layout_app_menu_card"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:background="@drawable/bg_liquid_glass_dialog"
+            android:clipChildren="true"
+            android:clipToPadding="true"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Hero Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:id="@+id/menu_app_icon_frame"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_tile_card">
+
+                    <ImageView
+                        android:id="@+id/menu_app_icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitCenter" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/menu_app_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="App Name"
+                        android:textColor="@color/m3_text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:singleLine="true"
+                        android:ellipsize="marquee" />
+
+                    <TextView
+                        android:id="@+id/menu_app_package"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="com.example.pkg"
+                        android:textColor="@color/m3_text_muted"
+                        android:textSize="11sp"
+                        android:singleLine="true"
+                        android:ellipsize="middle" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Subtle Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="10dp"
+                android:background="#25FFFFFF" />
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/btn_menu_open"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/bg_m3_menu_item"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:drawableStart="@drawable/ic_open"
+                    android:drawablePadding="10dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:text="Open App"
+                    android:textColor="@color/m3_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_menu_move"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/bg_m3_menu_item"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:drawableStart="@drawable/ic_move"
+                    android:drawablePadding="10dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:text="Move App"
+                    android:textColor="@color/m3_text_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_menu_toggle_pin"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/bg_m3_menu_item"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:drawableStart="@drawable/ic_star"
+                    android:drawablePadding="10dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:text="Pin to Favorites"
+                    android:textColor="@color/m3_primary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_menu_force_stop"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/bg_m3_menu_item"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:drawableStart="@drawable/ic_stop"
+                    android:drawablePadding="10dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:text="Force Stop"
+                    android:textColor="@color/m3_error"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_menu_uninstall"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/bg_m3_menu_item"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:drawableStart="@drawable/ic_delete"
+                    android:drawablePadding="10dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:text="Uninstall App"
+                    android:textColor="@color/m3_error"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_menu_close"
+                    android:layout_width="match_parent"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_m3_menu_item"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:drawableStart="@drawable/ic_close"
+                    android:drawablePadding="10dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:text="Close Menu"
+                    android:textColor="@color/m3_text_secondary"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Material 3 Expressive Recent Apps Switcher Overlay Modal -->
+    <FrameLayout
+        android:id="@+id/layout_recents_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/m3_recents_scrim"
+        android:clickable="true"
+        android:focusable="true"
+        android:elevation="28dp"
+        android:visibility="gone">
+
+        <!-- Top Header Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginStart="58dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="58dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_recents_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Recent Apps"
+                android:textColor="@color/m3_primary"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.02" />
+
+            <TextView
+                android:id="@+id/tv_recents_sub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="D-pad navigate  |  Press OK to switch  |  Press BACK to close"
+                android:textColor="@color/m3_text_secondary"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!-- Center Content: Carousel & Empty State -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="40dp">
+
+            <HorizontalScrollView
+                android:id="@+id/scroll_recents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/container_recents_carousel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="54dp"
+                    android:paddingEnd="54dp" />
+            </HorizontalScrollView>
+
+            <LinearLayout
+                android:id="@+id/layout_recents_empty_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:src="@drawable/ic_memory"
+                    android:tint="@color/m3_primary" />
+
+                <TextView
+                    android:id="@+id/tv_empty_state_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="Memory Optimized"
+                    android:textColor="@color/m3_text_primary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_empty_state_sub"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="No background apps running. RAM is clean."
+                    android:textColor="@color/m3_text_secondary"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Bottom Center Phone-Style Pill Button with Swinging X Icon -->
+        <LinearLayout
+            android:id="@+id/btn_clear_recents"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="38dp"
+            android:background="@drawable/bg_pill"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="22dp"
+            android:paddingEnd="26dp">
+
+            <ImageView
+                android:id="@+id/icon_clear_swing"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_close"
+                android:tint="@color/m3_primary" />
+
+            <TextView
+                android:id="@+id/tv_clear_recents_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear All"
+                android:textColor="@color/m3_primary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </FrameLayout>
+
+</FrameLayout>
