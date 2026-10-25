@@ -48,9 +48,9 @@ public class AppleMusicGradientView extends View {
     private final float[] pulseFreq = new float[]{0.28f, 0.37f, 0.48f, 0.85f};
     private final float[] pulseAmp = new float[]{0.20f, 0.24f, 0.18f, 0.32f};
 
-    // Colors
-    private int currentBaseColor = 0xFF10141D;
-    private int targetBaseColor = 0xFF10141D;
+    // Colors (Apple OLED Neutral Dark Surface)
+    private int currentBaseColor = 0xFF111215;
+    private int targetBaseColor = 0xFF111215;
     private final int[] currentOrbColors = new int[NUM_ORBS];
     private final int[] targetOrbColors = new int[NUM_ORBS];
     private final int[] startOrbColors = new int[NUM_ORBS];
@@ -79,7 +79,7 @@ public class AppleMusicGradientView extends View {
             orbMatrices[i] = new Matrix();
         }
 
-        setAppAccentColor(0xFF00497D, false);
+        setAppAccentColor(0xFF23262E, false);
     }
 
     public int getCurrentBaseColor() {

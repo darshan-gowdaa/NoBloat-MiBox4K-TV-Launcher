@@ -78,7 +78,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     private View btnNowPlayingNext;
     private View btnNowPlayingStop;
     private AppleMusicGradientView appleMusicGradientView;
-    private View viewHeaderScrim;
     private ScrollView mainScroll;
     private GridLayout gridDock;
     private GridLayout gridApps;
@@ -237,7 +236,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         if (btnNowPlayingStop != null) btnNowPlayingStop.setOnFocusChangeListener(mediaFocusListener);
 
         appleMusicGradientView = findViewById(R.id.apple_music_gradient_view);
-        viewHeaderScrim = findViewById(R.id.view_header_scrim);
         mainScroll = findViewById(R.id.main_scroll);
         if (mainScroll != null) {
             mainScroll.setClipToPadding(false);
@@ -252,24 +250,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
             }
         });
         mediaWidgetManager.start();
-
-        if (viewHeaderScrim != null) {
-            viewHeaderScrim.setAlpha(0f);
-            updateHeaderScrim(currentSurfaceColor);
-        }
-
-        if (mainScroll != null) {
-            mainScroll.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-                @Override
-                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                    int collapseDistance = dpToPx(48);
-                    float scrollRatio = Math.min(1.0f, Math.max(0.0f, (float) scrollY / (float) collapseDistance));
-                    if (viewHeaderScrim != null) {
-                        viewHeaderScrim.setAlpha(scrollRatio * 0.94f);
-                    }
-                }
-            });
-        }
 
         BluetoothDialogManager.AmbientDriftListener driftListener = new BluetoothDialogManager.AmbientDriftListener() {
             @Override
@@ -1008,18 +988,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         }
     }
 
-    private void updateHeaderScrim(int surf) {
-        if (viewHeaderScrim != null) {
-            int topColor = UIUtils.blendColors(surf, 0xFF000000, 0.45f);
-            int midColor = UIUtils.blendColors(surf, 0xFF000000, 0.25f);
-            android.graphics.drawable.GradientDrawable gd = new android.graphics.drawable.GradientDrawable(
-                    android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM,
-                    new int[]{topColor, midColor, 0x00000000}
-            );
-            viewHeaderScrim.setBackground(gd);
-        }
-    }
-
     private void ensureVisibleInScroll(final View v) {
         if (mainScroll == null || v == null) return;
         mainHandler.post(new Runnable() {
@@ -1031,8 +999,8 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                 int tileHeight = v.getHeight();
                 int screenHeight = getResources().getDisplayMetrics().heightPixels;
 
-                int topSafeMargin = dpToPx(140);
-                int bottomSafeMargin = screenHeight - dpToPx(90);
+                int topSafeMargin = dpToPx(190);
+                int bottomSafeMargin = screenHeight - dpToPx(30);
 
                 if (tileTop < topSafeMargin) {
                     int scrollDelta = tileTop - topSafeMargin;

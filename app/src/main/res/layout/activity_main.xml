@@ -13,16 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!-- Main Scrollable Content -->
+    <!-- Main Scrollable Content (Full Canvas Height, Zero Clip Edge) -->
     <ScrollView
         android:id="@+id/main_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="178dp"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:requiresFadingEdge="vertical"
-        android:fadingEdgeLength="28dp"
         android:fillViewport="true"
         android:overScrollMode="never"
         android:scrollbars="none">
@@ -34,9 +31,9 @@
             android:clipChildren="false"
             android:clipToPadding="false"
             android:orientation="vertical"
-            android:paddingStart="56dp"
-            android:paddingTop="20dp"
-            android:paddingEnd="56dp"
+            android:paddingStart="40dp"
+            android:paddingTop="198dp"
+            android:paddingEnd="40dp"
             android:paddingBottom="60dp">
 
             <!-- Section 1: Favorites / Pinned Row -->
@@ -65,20 +62,32 @@
                     android:shadowRadius="4" />
             </LinearLayout>
 
-            <GridLayout
-                android:id="@+id/grid_dock"
+            <FrameLayout
+                android:id="@+id/dock_shelf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_dock"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:columnCount="5"
-                android:orientation="horizontal" />
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:layout_marginBottom="16dp">
+
+                <GridLayout
+                    android:id="@+id/grid_dock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:columnCount="5"
+                    android:orientation="horizontal" />
+            </FrameLayout>
 
             <!-- Section 2: All Apps Grid -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -113,14 +122,6 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Dynamic Header Scrim (Fades in ONLY during scroll to occlude passing cards) -->
-    <View
-        android:id="@+id/view_header_scrim"
-        android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:layout_gravity="top"
-        android:elevation="14dp"
-        android:alpha="0" />
 
     <!-- Pinned Top Header Container (Clock, Pills, Spotlight Title) -->
     <LinearLayout
@@ -139,8 +140,8 @@
             android:id="@+id/top_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="56dp"
-            android:layout_marginEnd="56dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
             android:layout_marginTop="20dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -302,8 +303,8 @@
             android:minHeight="78dp"
             android:clipChildren="false"
             android:clipToPadding="false"
-            android:layout_marginStart="56dp"
-            android:layout_marginEnd="56dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
             android:layout_marginTop="8dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">

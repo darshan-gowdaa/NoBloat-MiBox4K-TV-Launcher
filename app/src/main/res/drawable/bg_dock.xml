@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Apple tvOS Frosted Glass Base Acrylic Plate -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="26dp" />
+            <gradient
+                android:angle="270"
+                android:startColor="#22161A24"
+                android:centerColor="#1611141C"
+                android:endColor="#0C0E1016"
+                android:type="linear" />
+        </shape>
+    </item>
+
+    <!-- Frosted Sheen Layer with Top Specular Gradient -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="26dp" />
+            <gradient
+                android:angle="270"
+                android:startColor="#32FFFFFF"
+                android:centerColor="#10FFFFFF"
+                android:endColor="#00000000"
+                android:type="linear" />
+        </shape>
+    </item>
+
+    <!-- Specular Frosted Border Stroke -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="26dp" />
+            <stroke
+                android:width="1.2dp"
+                android:color="#35FFFFFF" />
+        </shape>
+    </item>
+</layer-list>

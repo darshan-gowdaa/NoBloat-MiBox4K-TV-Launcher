@@ -5,23 +5,23 @@
     <!-- Seed: #0061A4 (Blue)  HCT color space           -->
     <!-- ============================================== -->
 
-    <!-- Primary -->
-    <color name="m3_primary">#9ECAFF</color>
-    <color name="m3_on_primary">#00325B</color>
-    <color name="m3_primary_container">#00497D</color>
-    <color name="m3_on_primary_container">#CFE5FF</color>
+    <!-- Primary (Apple White Minimalist Theme - No Blue Accent) -->
+    <color name="m3_primary">#FFFFFF</color>
+    <color name="m3_on_primary">#111318</color>
+    <color name="m3_primary_container">#272A2E</color>
+    <color name="m3_on_primary_container">#FFFFFF</color>
 
     <!-- Secondary -->
-    <color name="m3_secondary">#BBC7DB</color>
-    <color name="m3_on_secondary">#243041</color>
-    <color name="m3_secondary_container">#3B4658</color>
-    <color name="m3_on_secondary_container">#D7E3F7</color>
+    <color name="m3_secondary">#E2E2E6</color>
+    <color name="m3_on_secondary">#111318</color>
+    <color name="m3_secondary_container">#272A2E</color>
+    <color name="m3_on_secondary_container">#FFFFFF</color>
 
     <!-- Tertiary -->
-    <color name="m3_tertiary">#D6BEE4</color>
-    <color name="m3_on_tertiary">#3B2947</color>
-    <color name="m3_tertiary_container">#523F5F</color>
-    <color name="m3_on_tertiary_container">#F3DAFF</color>
+    <color name="m3_tertiary">#E2E2E6</color>
+    <color name="m3_on_tertiary">#111318</color>
+    <color name="m3_tertiary_container">#272A2E</color>
+    <color name="m3_on_tertiary_container">#FFFFFF</color>
 
     <!-- Error -->
     <color name="m3_error">#FFB4AB</color>
@@ -50,7 +50,7 @@
     <!-- Inverse -->
     <color name="m3_inverse_surface">#E2E2E6</color>
     <color name="m3_inverse_on_surface">#2F3135</color>
-    <color name="m3_inverse_primary">#0061A4</color>
+    <color name="m3_inverse_primary">#FFFFFF</color>
 
     <!-- Scrim -->
     <color name="m3_scrim">#000000</color>
@@ -69,9 +69,9 @@
     <color name="m3_focus_ring">#FFFFFF</color>
     <color name="m3_focus_halo">#35FFFFFF</color>
 
-    <!-- Chip / Badge (M3 Secondary Container) -->
-    <color name="m3_badge_bg">#3B4658</color>
-    <color name="m3_badge_text">#D7E3F7</color>
+    <!-- Chip / Badge (M3 Neutral) -->
+    <color name="m3_badge_bg">#272A2E</color>
+    <color name="m3_badge_text">#FFFFFF</color>
     <color name="m3_chip_bg">#272A2E</color>
     <color name="m3_chip_bg_focused">#35FFFFFF</color>
 

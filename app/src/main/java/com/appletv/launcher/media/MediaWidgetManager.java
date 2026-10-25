@@ -47,7 +47,7 @@ public class MediaWidgetManager {
     private final PackageManager packageManager;
 
     private MediaController activeController = null;
-    private String lastTrackSignature = "";
+    private String lastLoadedTrackSignature = null;
     private final java.util.concurrent.ExecutorService artExecutor = java.util.concurrent.Executors.newSingleThreadExecutor();
     private volatile String currentTrackSignature = "";
     private java.util.concurrent.Future<?> pendingArtTask = null;
@@ -66,9 +66,6 @@ public class MediaWidgetManager {
                 @Override
                 public void run() {
                     updatePlaybackState(state);
-                    if (activeController != null) {
-                        updateMetadata(activeController.getMetadata());
-                    }
                 }
             });
         }
@@ -180,6 +177,7 @@ public class MediaWidgetManager {
         lastArtResId = 0;
         lastTitle = null;
         lastArtistSub = null;
+        lastLoadedTrackSignature = null;
         unbindCurrentController();
     }
 
@@ -359,6 +357,7 @@ public class MediaWidgetManager {
         lastArtResId = 0;
         lastTitle = null;
         lastArtistSub = null;
+        lastLoadedTrackSignature = null;
     }
 
     private void updatePlaybackState(PlaybackState state) {
@@ -416,6 +415,10 @@ public class MediaWidgetManager {
             updateTrackText(displayTitle, sub);
 
             final String trackSig = (title != null ? title : "") + "|" + (artist != null ? artist : "") + "|" + pkg;
+            if (trackSig.equals(lastLoadedTrackSignature) && hasArtContent) {
+                return;
+            }
+            lastLoadedTrackSignature = trackSig;
             currentTrackSignature = trackSig;
 
             // Extract album art bitmap from all possible MediaMetadata / MediaDescription keys
@@ -819,6 +822,7 @@ public class MediaWidgetManager {
         lastArtResId = 0;
         lastTitle = null;
         lastArtistSub = null;
+        lastLoadedTrackSignature = null;
         if (container != null) {
             if (container.hasFocus()) {
                 View root = container.getRootView();
