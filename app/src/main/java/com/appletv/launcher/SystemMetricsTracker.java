@@ -6,9 +6,13 @@ import android.os.Environment;
 import android.os.StatFs;
 
 import java.io.File;
-import java.util.Locale;
 
 public class SystemMetricsTracker {
+
+    private static final ActivityManager.MemoryInfo MEMORY_INFO = new ActivityManager.MemoryInfo();
+    private static final MetricsData CACHED_METRICS = new MetricsData();
+    private static String cachedDataPath = null;
+    private static StatFs cachedStatFs = null;
 
     public static class MetricsData {
         public long availMemBytes;
@@ -17,45 +21,65 @@ public class SystemMetricsTracker {
         public long availDiskBytes;
         public long totalDiskBytes;
 
+        private String cachedDisplay = null;
+        private long lastAvail = -1;
+        private long lastTotal = -1;
+
         public String getPillDisplay() {
-            String freeStr = formatBytesGb(availMemBytes);
-            String totalStr = formatBytesGb(totalMemBytes);
-            return freeStr + " Free  |  " + totalStr;
+            if (cachedDisplay != null && availMemBytes == lastAvail && totalMemBytes == lastTotal) {
+                return cachedDisplay;
+            }
+            StringBuilder sb = new StringBuilder(24);
+            appendFormattedBytes(sb, availMemBytes);
+            sb.append(" Free  |  ");
+            appendFormattedBytes(sb, totalMemBytes);
+            cachedDisplay = sb.toString();
+            lastAvail = availMemBytes;
+            lastTotal = totalMemBytes;
+            return cachedDisplay;
         }
 
-        private String formatBytesGb(long bytes) {
-            if (bytes >= 1024L * 1024L * 1024L) {
-                double gb = (double) bytes / (1024.0 * 1024.0 * 1024.0);
-                return String.format(Locale.US, "%.1fG", gb);
+        private static void appendFormattedBytes(StringBuilder sb, long bytes) {
+            final long GB = 1024L * 1024L * 1024L;
+            if (bytes >= GB) {
+                long tenths = ((bytes * 100L) / GB + 5L) / 10L;
+                sb.append(tenths / 10L).append('.').append(tenths % 10L).append('G');
             } else {
-                long mb = bytes / (1024L * 1024L);
-                return mb + "M";
+                sb.append(bytes / (1024L * 1024L)).append('M');
             }
         }
     }
 
-    public static MetricsData readMetrics(Context context) {
-        MetricsData data = new MetricsData();
+    public static synchronized MetricsData readMetrics(Context context) {
+        MetricsData data = CACHED_METRICS;
 
-        // 1. MemoryInfo
+        // 1. MemoryInfo (reused MEMORY_INFO to avoid GC churn)
         try {
             ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
             if (am != null) {
-                ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
-                am.getMemoryInfo(mi);
-                data.availMemBytes = mi.availMem;
-                data.totalMemBytes = mi.totalMem;
-                data.isLowMem = mi.lowMemory;
+                am.getMemoryInfo(MEMORY_INFO);
+                data.availMemBytes = MEMORY_INFO.availMem;
+                data.totalMemBytes = MEMORY_INFO.totalMem;
+                data.isLowMem = MEMORY_INFO.lowMemory;
             }
         } catch (Throwable ignored) {}
 
-        // 2. StatFs for /data partition
+        // 2. StatFs for /data partition (reused StatFs instance via restat)
         try {
-            File dataDir = Environment.getDataDirectory();
-            if (dataDir != null) {
-                StatFs stat = new StatFs(dataDir.getAbsolutePath());
-                data.availDiskBytes = stat.getAvailableBlocksLong() * stat.getBlockSizeLong();
-                data.totalDiskBytes = stat.getBlockCountLong() * stat.getBlockSizeLong();
+            if (cachedDataPath == null) {
+                File dataDir = Environment.getDataDirectory();
+                if (dataDir != null) {
+                    cachedDataPath = dataDir.getAbsolutePath();
+                }
+            }
+            if (cachedDataPath != null) {
+                if (cachedStatFs == null) {
+                    cachedStatFs = new StatFs(cachedDataPath);
+                } else {
+                    cachedStatFs.restat(cachedDataPath);
+                }
+                data.availDiskBytes = cachedStatFs.getAvailableBlocksLong() * cachedStatFs.getBlockSizeLong();
+                data.totalDiskBytes = cachedStatFs.getBlockCountLong() * cachedStatFs.getBlockSizeLong();
             }
         } catch (Throwable ignored) {}
 

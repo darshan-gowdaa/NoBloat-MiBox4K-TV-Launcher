@@ -123,6 +123,16 @@
     </ScrollView>
 
 
+    <!-- Pinned Header Shadow Tint Scrim (Fades in smoothly when scrolled down to occlude passing cards) -->
+    <View
+        android:id="@+id/view_header_scrim"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:layout_gravity="top"
+        android:background="@drawable/bg_header_scrim"
+        android:elevation="15dp"
+        android:alpha="0" />
+
     <!-- Pinned Top Header Container (Clock, Pills, Spotlight Title) -->
     <LinearLayout
         android:id="@+id/layout_pinned_header"

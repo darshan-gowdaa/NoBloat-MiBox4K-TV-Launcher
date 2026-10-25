@@ -15,6 +15,7 @@ public class TimeTickReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (activity != null) {
             activity.updateTimeAndGreeting();
+            activity.updateWifiSsid();
         }
     }
 }

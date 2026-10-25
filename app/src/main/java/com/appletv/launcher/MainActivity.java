@@ -1,7 +1,5 @@
 package com.appletv.launcher;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,10 +7,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.graphics.Color;
 import android.graphics.Outline;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -31,7 +27,6 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.animation.PathInterpolator;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -70,7 +65,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     private TextView btnSettings;
 
     private TextView tvFocusedAppTitle;
-    private LinearLayout layoutSpotlight;
     private View layoutNowPlaying;
     private View btnNowPlayingArt;
     private View btnNowPlayingPrev;
@@ -78,6 +72,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     private View btnNowPlayingNext;
     private View btnNowPlayingStop;
     private AppleMusicGradientView appleMusicGradientView;
+    private View viewHeaderScrim;
     private ScrollView mainScroll;
     private GridLayout gridDock;
     private GridLayout gridApps;
@@ -101,14 +96,8 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         }
     });
 
-    private int currentSurfaceColor = 0xFF141218;
-    private ValueAnimator ambientAnimator;
-    private ObjectAnimator driftAnimatorX;
-    private ObjectAnimator driftAnimatorY;
     private boolean isAmbientMotionEnabled = true;
-
     private View lastFocusedView = null;
-    private int currentGlowColor = 0x25FFFFFF;
     private Typeface outfitThin;
     private Typeface outfitBold;
     private Typeface outfitMedium;
@@ -117,6 +106,10 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     private RecentAppsManager recentAppsManager;
     private AppPreferencesManager appPrefsManager;
     private final Map<String, AppInfo> allAppsMap = new LinkedHashMap<String, AppInfo>();
+
+    private final SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm", Locale.getDefault());
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMMM d", Locale.getDefault());
+    private final Date currentDate = new Date();
 
     private String lastMovedPackage = null;
     private boolean isLongPressHandled = false;
@@ -174,7 +167,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         btnSettings = findViewById(R.id.btn_settings);
 
         tvFocusedAppTitle = findViewById(R.id.tv_focused_app_title);
-        layoutSpotlight = findViewById(R.id.layout_spotlight);
         layoutNowPlaying = findViewById(R.id.layout_now_playing);
         btnNowPlayingArt = findViewById(R.id.container_now_playing_art);
         if (btnNowPlayingArt != null) {
@@ -236,9 +228,24 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         if (btnNowPlayingStop != null) btnNowPlayingStop.setOnFocusChangeListener(mediaFocusListener);
 
         appleMusicGradientView = findViewById(R.id.apple_music_gradient_view);
+        viewHeaderScrim = findViewById(R.id.view_header_scrim);
+        if (viewHeaderScrim != null) {
+            viewHeaderScrim.setAlpha(0f);
+        }
+
         mainScroll = findViewById(R.id.main_scroll);
         if (mainScroll != null) {
             mainScroll.setClipToPadding(false);
+            mainScroll.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                @Override
+                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    int collapseDistance = dpToPx(56);
+                    float scrollRatio = Math.min(1.0f, Math.max(0.0f, (float) scrollY / (float) collapseDistance));
+                    if (viewHeaderScrim != null) {
+                        viewHeaderScrim.setAlpha(scrollRatio);
+                    }
+                }
+            });
         }
         gridDock = findViewById(R.id.grid_dock);
         gridApps = findViewById(R.id.grid_apps);
@@ -249,7 +256,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                 animateAmbientGlow(dominantColor);
             }
         });
-        mediaWidgetManager.start();
 
         BluetoothDialogManager.AmbientDriftListener driftListener = new BluetoothDialogManager.AmbientDriftListener() {
             @Override
@@ -469,14 +475,13 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     }
 
     public void updateTimeAndGreeting() {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm", Locale.getDefault());
-        tvClock.setText(timeFormat.format(new Date()));
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMMM d", Locale.getDefault());
-        tvDate.setText(dateFormat.format(new Date()));
+        currentDate.setTime(System.currentTimeMillis());
+        if (tvClock != null) tvClock.setText(timeFormat.format(currentDate));
+        if (tvDate != null) tvDate.setText(dateFormat.format(currentDate));
     }
 
-    private void updateWifiSsid() {
+    void updateWifiSsid() {
+        if (btnWifi == null) return;
         try {
             ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
             if (cm != null) {
@@ -484,26 +489,45 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                 if (active != null && active.isConnected()) {
                     if (active.getType() == ConnectivityManager.TYPE_WIFI) {
                         WifiManager wm = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                        int drawableRes = R.drawable.ic_wifi_4_bar;
+                        String wifiName = "Wi-Fi";
                         if (wm != null) {
                             WifiInfo info = wm.getConnectionInfo();
                             if (info != null) {
+                                int rssi = info.getRssi();
+                                int level = WifiManager.calculateSignalLevel(rssi, 5);
+                                switch (level) {
+                                    case 4:
+                                        drawableRes = R.drawable.ic_wifi_4_bar;
+                                        break;
+                                    case 3:
+                                        drawableRes = R.drawable.ic_wifi_3_bar;
+                                        break;
+                                    case 2:
+                                        drawableRes = R.drawable.ic_wifi_2_bar;
+                                        break;
+                                    case 1:
+                                        drawableRes = R.drawable.ic_wifi_1_bar;
+                                        break;
+                                    default:
+                                        drawableRes = R.drawable.ic_wifi_0_bar;
+                                        break;
+                                }
                                 String ssid = info.getSSID();
                                 if (ssid != null && !ssid.isEmpty() && !ssid.equals("<unknown ssid>")) {
                                     if (ssid.startsWith("\"") && ssid.endsWith("\"") && ssid.length() >= 2) {
                                         ssid = ssid.substring(1, ssid.length() - 1);
                                     }
-                                    btnWifi.setText(ssid);
-                                    btnWifi.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_wifi, 0, 0, 0);
-                                    return;
+                                    wifiName = ssid;
                                 }
                             }
                         }
-                        btnWifi.setText("Wi-Fi");
-                        btnWifi.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_wifi, 0, 0, 0);
+                        btnWifi.setText(wifiName);
+                        btnWifi.setCompoundDrawablesWithIntrinsicBounds(drawableRes, 0, 0, 0);
                         return;
                     } else if (active.getType() == ConnectivityManager.TYPE_ETHERNET) {
                         btnWifi.setText("Ethernet");
-                        btnWifi.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_wifi, 0, 0, 0);
+                        btnWifi.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_wifi_4_bar, 0, 0, 0);
                         return;
                     }
                 }
@@ -777,7 +801,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
             tile.setId(View.generateViewId());
             tile.setTag(app);
 
-            final FrameLayout cardFrame = (FrameLayout) tile.findViewById(R.id.card_frame);
+            final FrameLayout cardFrame = tile.findViewById(R.id.card_frame);
             cardFrame.setClipToOutline(true);
             cardFrame.setOutlineProvider(new ViewOutlineProvider() {
                 @Override
@@ -786,8 +810,8 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                 }
             });
 
-            final ImageView imgBanner = (ImageView) tile.findViewById(R.id.img_banner);
-            final TextView tvTitle = (TextView) tile.findViewById(R.id.tv_title);
+            final ImageView imgBanner = tile.findViewById(R.id.img_banner);
+            final TextView tvTitle = tile.findViewById(R.id.tv_title);
             if (outfitBold != null) {
                 tvTitle.setTypeface(outfitBold);
             }
@@ -979,10 +1003,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     }
 
     private void animateAmbientGlow(int targetColor) {
-        if (ambientAnimator != null && ambientAnimator.isRunning()) {
-            ambientAnimator.cancel();
-        }
-        currentGlowColor = targetColor;
         if (appleMusicGradientView != null) {
             appleMusicGradientView.setAppAccentColor(targetColor, true);
         }
@@ -1297,7 +1317,12 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(timeTickReceiver, new IntentFilter(Intent.ACTION_TIME_TICK));
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_TIME_TICK);
+        filter.addAction(WifiManager.RSSI_CHANGED_ACTION);
+        filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(timeTickReceiver, filter);
         updateTimeAndGreeting();
         updateWifiSsid();
         updateSystemMetrics();

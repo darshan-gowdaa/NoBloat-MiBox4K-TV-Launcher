@@ -1,14 +1,11 @@
 package com.appletv.launcher;
 
-import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.os.SystemClock;
@@ -26,8 +23,9 @@ public class AppleMusicGradientView extends View {
     // Pre-allocated objects for zero-allocation 60fps loop
     private final Paint[] orbPaints = new Paint[NUM_ORBS];
     private final Matrix[] orbMatrices = new Matrix[NUM_ORBS];
-    private final ArgbEvaluator argbEvaluator = new ArgbEvaluator();
     private final int[][] stopsBuffer = new int[NUM_ORBS][5];
+    private final float[] hsvBuffer = new float[3];
+    private final float[] colorHsvBuffer = new float[3];
 
     // Orbital configuration constants [Orb 1..4]
     private final float[] baseCenterXFactor = new float[]{0.35f, 0.68f, 0.50f, 0.45f};
@@ -87,11 +85,10 @@ public class AppleMusicGradientView extends View {
     }
 
     public void setAppAccentColor(int focusColor, boolean animate) {
-        float[] hsv = new float[3];
-        Color.colorToHSV(focusColor, hsv);
-        float rawH = hsv[0];
-        float rawS = hsv[1];
-        float rawV = hsv[2];
+        Color.colorToHSV(focusColor, hsvBuffer);
+        float rawH = hsvBuffer[0];
+        float rawS = hsvBuffer[1];
+        float rawV = hsvBuffer[2];
 
         // 1. Check monochrome: if saturation < 8%, ignore hsv[0]=0 (RED) bug!
         final boolean isMonochrome = (rawS < 0.08f);
@@ -124,35 +121,30 @@ public class AppleMusicGradientView extends View {
         float hShift1 = isMonochrome ? 230.0f : ((targetH + 18.0f) % 360.0f);
         float hShift2 = isMonochrome ? 200.0f : ((targetH - 15.0f + 360.0f) % 360.0f);
 
-        int newBase = Color.HSVToColor(new float[]{
-                targetH,
-                Math.min(targetS * 0.45f, 0.25f),
-                isMonochrome ? 0.06f : 0.08f
-        });
+        colorHsvBuffer[0] = targetH;
+        colorHsvBuffer[1] = Math.min(targetS * 0.45f, 0.25f);
+        colorHsvBuffer[2] = isMonochrome ? 0.06f : 0.08f;
+        int newBase = Color.HSVToColor(colorHsvBuffer);
 
-        int newOrb1 = Color.HSVToColor(new float[]{
-                targetH,
-                targetS,
-                targetV
-        });
+        colorHsvBuffer[0] = targetH;
+        colorHsvBuffer[1] = targetS;
+        colorHsvBuffer[2] = targetV;
+        int newOrb1 = Color.HSVToColor(colorHsvBuffer);
 
-        int newOrb2 = Color.HSVToColor(new float[]{
-                hShift1,
-                targetS * 0.85f,
-                Math.min(0.82f, targetV * 0.92f)
-        });
+        colorHsvBuffer[0] = hShift1;
+        colorHsvBuffer[1] = targetS * 0.85f;
+        colorHsvBuffer[2] = Math.min(0.82f, targetV * 0.92f);
+        int newOrb2 = Color.HSVToColor(colorHsvBuffer);
 
-        int newOrb3 = Color.HSVToColor(new float[]{
-                hShift2,
-                Math.min(1.0f, targetS * 1.05f),
-                Math.max(0.30f, targetV * 0.72f)
-        });
+        colorHsvBuffer[0] = hShift2;
+        colorHsvBuffer[1] = Math.min(1.0f, targetS * 1.05f);
+        colorHsvBuffer[2] = Math.max(0.30f, targetV * 0.72f);
+        int newOrb3 = Color.HSVToColor(colorHsvBuffer);
 
-        int newOrb4 = Color.HSVToColor(new float[]{
-                targetH,
-                targetS * 0.75f,
-                Math.min(0.78f, targetV * 0.82f)
-        });
+        colorHsvBuffer[0] = targetH;
+        colorHsvBuffer[1] = targetS * 0.75f;
+        colorHsvBuffer[2] = Math.min(0.78f, targetV * 0.82f);
+        int newOrb4 = Color.HSVToColor(colorHsvBuffer);
 
         if (!animate) {
             currentBaseColor = newBase;
@@ -186,10 +178,10 @@ public class AppleMusicGradientView extends View {
         colorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator anim) {
-                float f = (Float) anim.getAnimatedValue();
-                currentBaseColor = (Integer) argbEvaluator.evaluate(f, startBaseColor, targetBaseColor);
+                float f = ((Number) anim.getAnimatedValue()).floatValue();
+                currentBaseColor = interpolateColor(f, startBaseColor, targetBaseColor);
                 for (int i = 0; i < NUM_ORBS; i++) {
-                    currentOrbColors[i] = (Integer) argbEvaluator.evaluate(f, startOrbColors[i], targetOrbColors[i]);
+                    currentOrbColors[i] = interpolateColor(f, startOrbColors[i], targetOrbColors[i]);
                 }
                 if (Math.abs(f - lastRebuild[0]) >= 0.12f || f >= 1.0f) {
                     lastRebuild[0] = f;
@@ -200,6 +192,25 @@ public class AppleMusicGradientView extends View {
             }
         });
         colorAnimator.start();
+    }
+
+    private static int interpolateColor(float fraction, int start, int end) {
+        int startA = (start >>> 24);
+        int startR = (start >> 16) & 0xff;
+        int startG = (start >> 8) & 0xff;
+        int startB = start & 0xff;
+
+        int endA = (end >>> 24);
+        int endR = (end >> 16) & 0xff;
+        int endG = (end >> 8) & 0xff;
+        int endB = end & 0xff;
+
+        int a = (int) (startA + fraction * (endA - startA));
+        int r = (int) (startR + fraction * (endR - startR));
+        int g = (int) (startG + fraction * (endG - startG));
+        int b = (int) (startB + fraction * (endB - startB));
+
+        return (a << 24) | (r << 16) | (g << 8) | b;
     }
 
     private void rebuildShaders() {

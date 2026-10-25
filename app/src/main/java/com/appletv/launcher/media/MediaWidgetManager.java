@@ -45,6 +45,7 @@ public class MediaWidgetManager {
     private final MediaSessionManager sessionManager;
     private final ComponentName listenerComponent;
     private final PackageManager packageManager;
+    private final java.util.Map<String, String> appNameCache = new java.util.HashMap<String, String>();
 
     private MediaController activeController = null;
     private String lastLoadedTrackSignature = null;
@@ -58,36 +59,50 @@ public class MediaWidgetManager {
     private boolean hasArtContent = false;
     private String lastTitle = null;
     private String lastArtistSub = null;
+    private int lastPlaybackState = -1;
+    private boolean isStarted = false;
 
     private final MediaController.Callback controllerCallback = new MediaController.Callback() {
         @Override
-        public void onPlaybackStateChanged(PlaybackState state) {
-            mainHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    updatePlaybackState(state);
-                }
-            });
+        public void onPlaybackStateChanged(final PlaybackState state) {
+            if (Looper.myLooper() == Looper.getMainLooper()) {
+                updatePlaybackState(state);
+            } else {
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        updatePlaybackState(state);
+                    }
+                });
+            }
         }
 
         @Override
-        public void onMetadataChanged(MediaMetadata metadata) {
-            mainHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    updateMetadata(metadata);
-                }
-            });
+        public void onMetadataChanged(final MediaMetadata metadata) {
+            if (Looper.myLooper() == Looper.getMainLooper()) {
+                updateMetadata(metadata);
+            } else {
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateMetadata(metadata);
+                    }
+                });
+            }
         }
 
         @Override
         public void onSessionDestroyed() {
-            mainHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    findAndBindActiveSession();
-                }
-            });
+            if (Looper.myLooper() == Looper.getMainLooper()) {
+                findAndBindActiveSession();
+            } else {
+                mainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        findAndBindActiveSession();
+                    }
+                });
+            }
         }
     };
 
@@ -95,12 +110,16 @@ public class MediaWidgetManager {
             new MediaSessionManager.OnActiveSessionsChangedListener() {
                 @Override
                 public void onActiveSessionsChanged(List<MediaController> controllers) {
-                    mainHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            findAndBindActiveSession();
-                        }
-                    });
+                    if (Looper.myLooper() == Looper.getMainLooper()) {
+                        findAndBindActiveSession();
+                    } else {
+                        mainHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                findAndBindActiveSession();
+                            }
+                        });
+                    }
                 }
             };
 
@@ -132,7 +151,9 @@ public class MediaWidgetManager {
         setupControls();
     }
 
-    public void start() {
+    public synchronized void start() {
+        if (isStarted) return;
+        isStarted = true;
         try {
             android.util.Log.i("MediaWidget", "MediaWidgetManager start() called");
             if (sessionManager != null) {
@@ -145,7 +166,9 @@ public class MediaWidgetManager {
         }
     }
 
-    public void stop() {
+    public synchronized void stop() {
+        if (!isStarted) return;
+        isStarted = false;
         try {
             if (sessionManager != null) {
                 sessionManager.removeOnActiveSessionsChangedListener(sessionsChangedListener);
@@ -153,6 +176,7 @@ public class MediaWidgetManager {
         } catch (Throwable ignored) {}
         if (pendingArtTask != null) {
             pendingArtTask.cancel(true);
+            pendingArtTask = null;
         }
         if (equalizerView != null) {
             equalizerView.setPlaying(false);
@@ -178,6 +202,7 @@ public class MediaWidgetManager {
         lastTitle = null;
         lastArtistSub = null;
         lastLoadedTrackSignature = null;
+        lastPlaybackState = -1;
         unbindCurrentController();
     }
 
@@ -358,11 +383,13 @@ public class MediaWidgetManager {
         lastTitle = null;
         lastArtistSub = null;
         lastLoadedTrackSignature = null;
+        lastPlaybackState = -1;
     }
 
     private void updatePlaybackState(PlaybackState state) {
         if (state == null || container == null) {
             android.util.Log.w("MediaWidget", "updatePlaybackState: state or container is null (container=" + container + ")");
+            lastPlaybackState = -1;
             if (equalizerView != null) equalizerView.setPlaying(false);
             hideWidget();
             return;
@@ -373,19 +400,33 @@ public class MediaWidgetManager {
         boolean isPlaying = (s == PlaybackState.STATE_PLAYING);
         if (s == PlaybackState.STATE_PLAYING || s == PlaybackState.STATE_PAUSED || s == PlaybackState.STATE_BUFFERING) {
             showWidget();
-            if (btnPlayPause != null) {
-                if (isPlaying) {
-                    btnPlayPause.setImageResource(R.drawable.ic_pause);
-                } else {
-                    btnPlayPause.setImageResource(R.drawable.ic_play);
+            if (s != lastPlaybackState) {
+                lastPlaybackState = s;
+                if (btnPlayPause != null) {
+                    btnPlayPause.setImageResource(isPlaying ? R.drawable.ic_pause : R.drawable.ic_play);
+                }
+                if (equalizerView != null) {
+                    equalizerView.setPlaying(isPlaying);
                 }
             }
-            if (equalizerView != null) {
-                equalizerView.setPlaying(isPlaying);
-            }
         } else {
+            lastPlaybackState = s;
             if (equalizerView != null) equalizerView.setPlaying(false);
             hideWidget();
+        }
+    }
+
+    private String getAppName(String pkg) {
+        if (pkg == null) return "";
+        String cached = appNameCache.get(pkg);
+        if (cached != null) return cached;
+        try {
+            cached = packageManager.getApplicationLabel(packageManager.getApplicationInfo(pkg, 0)).toString();
+            appNameCache.put(pkg, cached);
+            return cached;
+        } catch (Throwable ignored) {
+            appNameCache.put(pkg, pkg);
+            return pkg;
         }
     }
 
@@ -400,26 +441,23 @@ public class MediaWidgetManager {
             }
 
             String pkg = activeController.getPackageName();
-            String appName = pkg;
-            try {
-                appName = packageManager.getApplicationLabel(packageManager.getApplicationInfo(pkg, 0)).toString();
-            } catch (Throwable ignored) {}
-
-            String displayTitle = (title != null && !title.trim().isEmpty() ? title : "Unknown Title");
-            String sub = "";
-            if (artist != null && !artist.trim().isEmpty()) {
-                sub = artist + " • ";
-            }
-            sub += appName;
-
-            updateTrackText(displayTitle, sub);
-
             final String trackSig = (title != null ? title : "") + "|" + (artist != null ? artist : "") + "|" + pkg;
-            if (trackSig.equals(lastLoadedTrackSignature) && hasArtContent) {
-                return;
+
+            // Prevent redundant unmarshaling and URI churn if track is identical
+            if (trackSig.equals(lastLoadedTrackSignature)) {
+                if (hasArtContent || (pendingArtTask != null && !pendingArtTask.isDone())) {
+                    return;
+                }
             }
+
             lastLoadedTrackSignature = trackSig;
             currentTrackSignature = trackSig;
+
+            String appName = getAppName(pkg);
+            String displayTitle = (title != null && !title.trim().isEmpty() ? title : "Unknown Title");
+            String sub = (artist != null && !artist.trim().isEmpty()) ? (artist + " • " + appName) : appName;
+
+            updateTrackText(displayTitle, sub);
 
             // Extract album art bitmap from all possible MediaMetadata / MediaDescription keys
             Bitmap art = metadata.getBitmap(MediaMetadata.METADATA_KEY_ALBUM_ART);
