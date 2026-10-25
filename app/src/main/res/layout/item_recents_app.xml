@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Resume"
-                android:textColor="@color/m3_badge_text"
+                android:textColor="@color/sys_badge_text"
                 android:textSize="11sp"
                 android:fontFamily="sans-serif-medium"
                 android:letterSpacing="0.03" />
@@ -60,7 +60,7 @@
         android:gravity="center"
         android:maxLines="1"
         android:text="App Name"
-        android:textColor="@color/m3_text_primary"
+        android:textColor="@color/sys_text_primary"
         android:textSize="14sp"
         android:fontFamily="sans-serif-medium"
         android:letterSpacing="0.02" />

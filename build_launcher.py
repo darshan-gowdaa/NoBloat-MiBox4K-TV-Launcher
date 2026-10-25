@@ -22,7 +22,7 @@ SRC_DIR = os.path.join(APP_DIR, "src", "main")
 RES_DIR = os.path.join(SRC_DIR, "res")
 ASSETS_DIR = os.path.join(SRC_DIR, "assets")
 MANIFEST = os.path.join(SRC_DIR, "AndroidManifest.xml")
-JAVA_DIR = os.path.join(SRC_DIR, "java", "com", "appletv", "launcher")
+JAVA_DIR = os.path.join(SRC_DIR, "java", "com", "nobloat", "launcher")
 
 BUILD_DIR = os.path.join(LAUNCHER_DIR, "build_out")
 RES_ZIP = os.path.join(BUILD_DIR, "res.zip")
@@ -31,7 +31,7 @@ CLASSES_DIR = os.path.join(BUILD_DIR, "classes")
 DEX_DIR = os.path.join(BUILD_DIR, "dex")
 UNALIGNED_APK = os.path.join(BUILD_DIR, "unaligned.apk")
 ALIGNED_APK = os.path.join(BUILD_DIR, "aligned.apk")
-FINAL_APK = os.path.join(LAUNCHER_DIR, "appletv-launcher.apk")
+FINAL_APK = os.path.join(LAUNCHER_DIR, "System-Launcher-NoBloat-v1.0.0.apk")
 
 def run(cmd, desc):
     print(f"==> {desc}")
@@ -73,7 +73,7 @@ def main():
     run(link_cmd, "Linking resources with aapt2")
 
     # 3. Find java files
-    java_files = [os.path.join(GEN_DIR, "com", "appletv", "launcher", "R.java")]
+    java_files = [os.path.join(GEN_DIR, "com", "nobloat", "launcher", "R.java")]
     for root, dirs, files in os.walk(JAVA_DIR):
         for f in files:
             if f.endswith(".java"):

@@ -4,11 +4,11 @@
     android:viewportWidth="24"
     android:viewportHeight="24">
     <path
-        android:fillColor="@color/m3_primary"
+        android:fillColor="@color/sys_primary"
         android:fillAlpha="0.28"
         android:pathData="M12.01,21.49L23.64,7c-0.45,-0.34 -4.93,-4 -11.64,-4C5.28,3 0.81,6.66 0.36,7l11.63,14.49 0.01,0.01 0.01,-0.01z"/>
     <path
-        android:fillColor="@color/m3_primary"
+        android:fillColor="@color/sys_primary"
         android:fillAlpha="1.0"
-        android:pathData="M3.53,10.95l8.46,10.54l0.01,0.01l0.01,-0.01l8.46,-10.54C20.04,10.62 16.81,8 12,8C7.19,8 3.96,10.62 3.53,10.95z"/>
+        android:pathData="Modern.53,10.95l8.46,10.54l0.01,0.01l0.01,-0.01l8.46,-10.54C20.04,10.62 16.81,8 12,8C7.19,8 3.96,10.62 3.53,10.95z"/>
 </vector>

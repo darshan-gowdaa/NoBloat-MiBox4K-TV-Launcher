@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     android:clipChildren="false"
     android:clipToPadding="false"
-    android:background="@color/m3_surface">
+    android:background="@color/sys_surface">
 
-    <!-- Material 3 Dynamic Ambient Mesh / Apple Music Style Living Fluid Moving Gradient -->
-    <com.appletv.launcher.AppleMusicGradientView
-        android:id="@+id/apple_music_gradient_view"
+    <!-- Modern Dynamic Ambient Mesh / Clean Music Style Living Fluid Moving Gradient -->
+    <com.nobloat.launcher.AmbientGradientView
+        android:id="@+id/ambient_gradient_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -51,7 +51,7 @@
                     android:drawableStart="@drawable/ic_star"
                     android:drawablePadding="8dp"
                     android:text="Favorites"
-                    android:textColor="@color/m3_text_primary"
+                    android:textColor="@color/sys_text_primary"
                     android:textSize="17sp"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-medium"
@@ -99,7 +99,7 @@
                     android:drawableStart="@drawable/ic_apps"
                     android:drawablePadding="8dp"
                     android:text="All Apps"
-                    android:textColor="@color/m3_text_primary"
+                    android:textColor="@color/sys_text_primary"
                     android:textSize="17sp"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-medium"
@@ -123,13 +123,12 @@
     </ScrollView>
 
 
-    <!-- Pinned Header Shadow Tint Scrim (Fades in smoothly when scrolled down to occlude passing cards) -->
-    <View
+    <!-- Pinned Header Ambient Living Scrim (Seamless ambient background plate that occludes passing cards on scroll) -->
+    <com.nobloat.launcher.AmbientGradientView
         android:id="@+id/view_header_scrim"
         android:layout_width="match_parent"
         android:layout_height="230dp"
         android:layout_gravity="top"
-        android:background="@drawable/bg_header_scrim"
         android:elevation="15dp"
         android:alpha="0" />
 
@@ -145,7 +144,7 @@
         android:elevation="16dp"
         android:orientation="vertical">
 
-        <!-- Top M3 Expressive Bar -->
+        <!-- Top Modern Bar -->
         <LinearLayout
             android:id="@+id/top_bar"
             android:layout_width="match_parent"
@@ -156,7 +155,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <!-- Left: M3 Expressive Clock Widget & Date -->
+            <!-- Left: Modern Clock Widget & Date -->
             <LinearLayout
                 android:id="@+id/header_left"
                 android:layout_width="wrap_content"
@@ -172,7 +171,7 @@
                     android:focusable="true"
                     android:background="?android:attr/selectableItemBackgroundBorderless"
                     android:text="9:55"
-                    android:textColor="@color/m3_text_primary"
+                    android:textColor="@color/sys_text_primary"
                     android:textSize="44sp"
                     android:fontFamily="sans-serif-medium"
                     android:includeFontPadding="false"
@@ -188,7 +187,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:text="Sunday, October 25"
-                    android:textColor="@color/m3_text_primary"
+                    android:textColor="@color/sys_text_primary"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-medium"
@@ -204,7 +203,7 @@
                 android:layout_height="1dp"
                 android:layout_weight="1" />
 
-            <!-- Right: Material 3 Liquid Glass Status Pills: 1. Wi-Fi, 2. Bluetooth, 3. RAM, 4. Settings -->
+            <!-- Right: Modern Liquid Glass Status Pills: 1. Wi-Fi, 2. Bluetooth, 3. RAM, 4. Settings -->
             <LinearLayout
                 android:id="@+id/header_right"
                 android:layout_width="wrap_content"
@@ -226,7 +225,7 @@
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp"
                     android:text="Wi-Fi"
-                    android:textColor="@color/m3_text_primary"
+                    android:textColor="@color/sys_text_primary"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-medium"
@@ -249,7 +248,7 @@
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp"
                     android:text="Ready"
-                    android:textColor="@color/m3_text_primary"
+                    android:textColor="@color/sys_text_primary"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-medium"
@@ -272,7 +271,7 @@
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp"
                     android:text="886M Free  |  1.9G"
-                    android:textColor="@color/m3_text_primary"
+                    android:textColor="@color/sys_text_primary"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-medium"
@@ -294,7 +293,7 @@
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp"
                     android:text="Settings"
-                    android:textColor="@color/m3_text_primary"
+                    android:textColor="@color/sys_text_primary"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-medium"
@@ -305,7 +304,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- M3 Expressive Spotlight Row: Left = Focused App Title, Right = Now Playing Media Capsule -->
+        <!-- Modern Spotlight Row: Left = Focused App Title, Right = Now Playing Media Capsule -->
         <LinearLayout
             android:id="@+id/layout_spotlight"
             android:layout_width="match_parent"
@@ -324,7 +323,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Stremio"
-                android:textColor="@color/m3_text_primary"
+                android:textColor="@color/sys_text_primary"
                 android:textSize="26sp"
                 android:fontFamily="sans-serif-medium"
                 android:letterSpacing="0.02"
@@ -338,7 +337,7 @@
                 android:layout_height="1dp"
                 android:layout_weight="1" />
 
-            <!-- Material 3 Expressive Dynamic Now Playing Media Player Capsule (Enlarged 92dp Height, 80dp Art) -->
+            <!-- Modern Expressive Dynamic Now Playing Media Player Capsule (Enlarged 92dp Height, 80dp Art) -->
             <LinearLayout
                 android:id="@+id/layout_now_playing"
                 android:layout_width="wrap_content"
@@ -380,7 +379,7 @@
                         android:background="#40000000" />
 
                     <!-- Equalizer Visualizer Overlay (30dp tall, centered on top of album art) -->
-                    <com.appletv.launcher.widget.EqualizerView
+                    <com.nobloat.launcher.widget.EqualizerView
                         android:id="@+id/equalizer_view"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
@@ -397,14 +396,14 @@
                     android:orientation="vertical">
 
                     <!-- Custom Paused Marquee Track Title -->
-                    <com.appletv.launcher.widget.MarqueeTextView
+                    <com.nobloat.launcher.widget.MarqueeTextView
                         android:id="@+id/tv_now_playing_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxWidth="250dp"
                         android:singleLine="true"
                         android:text="Track Title"
-                        android:textColor="@color/m3_text_primary"
+                        android:textColor="@color/sys_text_primary"
                         android:textSize="15sp"
                         android:shadowColor="#CC000000"
                         android:shadowDx="0"
@@ -419,7 +418,7 @@
                         android:maxWidth="250dp"
                         android:singleLine="true"
                         android:text="Artist • App"
-                        android:textColor="@color/m3_text_secondary"
+                        android:textColor="@color/sys_text_secondary"
                         android:textSize="12.5sp"
                         android:shadowColor="#CC000000"
                         android:shadowDx="0"
@@ -437,7 +436,7 @@
                     android:focusable="true"
                     android:padding="7dp"
                     android:src="@drawable/ic_skip_previous"
-                    android:tint="@color/m3_text_primary" />
+                    android:tint="@color/sys_text_primary" />
 
                 <ImageView
                     android:id="@+id/btn_now_playing_play"
@@ -449,7 +448,7 @@
                     android:focusable="true"
                     android:padding="9dp"
                     android:src="@drawable/ic_play"
-                    android:tint="@color/m3_text_primary" />
+                    android:tint="@color/sys_text_primary" />
 
                 <ImageView
                     android:id="@+id/btn_now_playing_next"
@@ -461,7 +460,7 @@
                     android:focusable="true"
                     android:padding="7dp"
                     android:src="@drawable/ic_skip_next"
-                    android:tint="@color/m3_text_primary" />
+                    android:tint="@color/sys_text_primary" />
 
                 <ImageView
                     android:id="@+id/btn_now_playing_stop"
@@ -473,7 +472,7 @@
                     android:focusable="true"
                     android:padding="8dp"
                     android:src="@drawable/ic_media_stop"
-                    android:tint="@color/m3_text_secondary" />
+                    android:tint="@color/sys_text_secondary" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -507,7 +506,7 @@
                 android:drawableStart="@drawable/ic_bluetooth"
                 android:drawablePadding="8dp"
                 android:text="Bluetooth Devices"
-                android:textColor="@color/m3_primary"
+                android:textColor="@color/sys_primary"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-medium" />
@@ -537,7 +536,7 @@
                 android:id="@+id/btn_open_bt_settings"
                 android:layout_width="match_parent"
                 android:layout_height="34dp"
-                android:background="@drawable/bg_m3_menu_item"
+                android:background="@drawable/bg_menu_item"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
@@ -546,7 +545,7 @@
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp"
                 android:text="All Devices"
-                android:textColor="@color/m3_primary"
+                android:textColor="@color/sys_primary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -581,7 +580,7 @@
                 android:drawableStart="@drawable/ic_settings"
                 android:drawablePadding="10dp"
                 android:text="TV Settings"
-                android:textColor="@color/m3_primary"
+                android:textColor="@color/sys_primary"
                 android:textSize="17sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-medium" />
@@ -592,7 +591,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="12dp"
                 android:text="System and launcher preferences"
-                android:textColor="@color/m3_text_secondary"
+                android:textColor="@color/sys_text_secondary"
                 android:textSize="12sp" />
 
             <!-- 1. System Settings -->
@@ -601,7 +600,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
                 android:layout_marginBottom="6dp"
-                android:background="@drawable/bg_m3_menu_item"
+                android:background="@drawable/bg_menu_item"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -610,7 +609,7 @@
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp"
                 android:text="All System Settings"
-                android:textColor="@color/m3_text_primary"
+                android:textColor="@color/sys_text_primary"
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
@@ -620,7 +619,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
                 android:layout_marginBottom="6dp"
-                android:background="@drawable/bg_m3_menu_item"
+                android:background="@drawable/bg_menu_item"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -629,7 +628,7 @@
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp"
                 android:text="Network &amp; Wi-Fi"
-                android:textColor="@color/m3_text_primary"
+                android:textColor="@color/sys_text_primary"
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
@@ -639,7 +638,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
                 android:layout_marginBottom="6dp"
-                android:background="@drawable/bg_m3_menu_item"
+                android:background="@drawable/bg_menu_item"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -648,7 +647,7 @@
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp"
                 android:text="Remotes &amp; Accessories"
-                android:textColor="@color/m3_text_primary"
+                android:textColor="@color/sys_text_primary"
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
@@ -658,7 +657,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
                 android:layout_marginBottom="6dp"
-                android:background="@drawable/bg_m3_menu_item"
+                android:background="@drawable/bg_menu_item"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -667,7 +666,7 @@
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp"
                 android:text="Apps &amp; Permissions"
-                android:textColor="@color/m3_text_primary"
+                android:textColor="@color/sys_text_primary"
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
@@ -677,7 +676,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
                 android:layout_marginBottom="6dp"
-                android:background="@drawable/bg_m3_menu_item"
+                android:background="@drawable/bg_menu_item"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -686,7 +685,7 @@
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp"
                 android:text="Display &amp; Sound"
-                android:textColor="@color/m3_text_primary"
+                android:textColor="@color/sys_text_primary"
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
@@ -703,7 +702,7 @@
                 android:id="@+id/setting_item_ambient"
                 android:layout_width="match_parent"
                 android:layout_height="38dp"
-                android:background="@drawable/bg_m3_menu_item"
+                android:background="@drawable/bg_menu_item"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
@@ -712,7 +711,7 @@
                 android:paddingStart="14dp"
                 android:paddingEnd="14dp"
                 android:text="Ambient Glow: Active"
-                android:textColor="@color/m3_primary"
+                android:textColor="@color/sys_primary"
                 android:textSize="13sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -772,7 +771,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="App Name"
-                        android:textColor="@color/m3_text_primary"
+                        android:textColor="@color/sys_text_primary"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:singleLine="true"
@@ -784,7 +783,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="2dp"
                         android:text="com.example.pkg"
-                        android:textColor="@color/m3_text_muted"
+                        android:textColor="@color/sys_text_muted"
                         android:textSize="11sp"
                         android:singleLine="true"
                         android:ellipsize="middle" />
@@ -810,7 +809,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
                     android:layout_marginBottom="5dp"
-                    android:background="@drawable/bg_m3_menu_item"
+                    android:background="@drawable/bg_menu_item"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -819,7 +818,7 @@
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
                     android:text="Open App"
-                    android:textColor="@color/m3_primary"
+                    android:textColor="@color/sys_primary"
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
@@ -828,7 +827,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
                     android:layout_marginBottom="5dp"
-                    android:background="@drawable/bg_m3_menu_item"
+                    android:background="@drawable/bg_menu_item"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -837,7 +836,7 @@
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
                     android:text="Move App"
-                    android:textColor="@color/m3_text_primary"
+                    android:textColor="@color/sys_text_primary"
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
@@ -846,7 +845,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
                     android:layout_marginBottom="5dp"
-                    android:background="@drawable/bg_m3_menu_item"
+                    android:background="@drawable/bg_menu_item"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -855,7 +854,7 @@
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
                     android:text="Pin to Favorites"
-                    android:textColor="@color/m3_primary"
+                    android:textColor="@color/sys_primary"
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
@@ -864,7 +863,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
                     android:layout_marginBottom="5dp"
-                    android:background="@drawable/bg_m3_menu_item"
+                    android:background="@drawable/bg_menu_item"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -873,7 +872,7 @@
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
                     android:text="Force Stop"
-                    android:textColor="@color/m3_error"
+                    android:textColor="@color/sys_error"
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
@@ -882,7 +881,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
                     android:layout_marginBottom="5dp"
-                    android:background="@drawable/bg_m3_menu_item"
+                    android:background="@drawable/bg_menu_item"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -891,7 +890,7 @@
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
                     android:text="Uninstall App"
-                    android:textColor="@color/m3_error"
+                    android:textColor="@color/sys_error"
                     android:textSize="13sp"
                     android:textStyle="bold" />
 
@@ -899,7 +898,7 @@
                     android:id="@+id/btn_menu_close"
                     android:layout_width="match_parent"
                     android:layout_height="36dp"
-                    android:background="@drawable/bg_m3_menu_item"
+                    android:background="@drawable/bg_menu_item"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
@@ -908,19 +907,19 @@
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
                     android:text="Close Menu"
-                    android:textColor="@color/m3_text_secondary"
+                    android:textColor="@color/sys_text_secondary"
                     android:textSize="13sp"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
     </FrameLayout>
 
-    <!-- Material 3 Expressive Recent Apps Switcher Overlay Modal -->
+    <!-- Modern Expressive Recent Apps Switcher Overlay Modal -->
     <FrameLayout
         android:id="@+id/layout_recents_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/m3_recents_scrim"
+        android:background="@color/sys_recents_scrim"
         android:clickable="true"
         android:focusable="true"
         android:elevation="28dp"
@@ -941,7 +940,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Recent Apps"
-                android:textColor="@color/m3_primary"
+                android:textColor="@color/sys_primary"
                 android:textSize="26sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-medium"
@@ -953,7 +952,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:text="D-pad navigate  |  Press OK to switch  |  Press BACK to close"
-                android:textColor="@color/m3_text_secondary"
+                android:textColor="@color/sys_text_secondary"
                 android:textSize="13sp" />
         </LinearLayout>
 
@@ -994,7 +993,7 @@
                     android:layout_width="52dp"
                     android:layout_height="52dp"
                     android:src="@drawable/ic_memory"
-                    android:tint="@color/m3_primary" />
+                    android:tint="@color/sys_primary" />
 
                 <TextView
                     android:id="@+id/tv_empty_state_title"
@@ -1002,7 +1001,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:text="Memory Optimized"
-                    android:textColor="@color/m3_text_primary"
+                    android:textColor="@color/sys_text_primary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -1012,7 +1011,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="No background apps running. RAM is clean."
-                    android:textColor="@color/m3_text_secondary"
+                    android:textColor="@color/sys_text_secondary"
                     android:textSize="13sp" />
             </LinearLayout>
         </FrameLayout>
@@ -1038,14 +1037,14 @@
                 android:layout_height="18dp"
                 android:layout_marginEnd="10dp"
                 android:src="@drawable/ic_close"
-                android:tint="@color/m3_primary" />
+                android:tint="@color/sys_primary" />
 
             <TextView
                 android:id="@+id/tv_clear_recents_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Clear All"
-                android:textColor="@color/m3_primary"
+                android:textColor="@color/sys_primary"
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </LinearLayout>

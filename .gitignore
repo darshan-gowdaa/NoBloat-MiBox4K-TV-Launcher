@@ -3,6 +3,7 @@ build/
 build_out/
 *.apk
 *.idsig
+!release/*.apk
 
 # Gradle & IDE
 .gradle/
@@ -20,4 +21,3 @@ local.properties
 *.log
 *.tmp
 capture/
-screenshot*.png

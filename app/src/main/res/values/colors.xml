@@ -1,93 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- ============================================== -->
-    <!-- Material 3 Expressive — Blue Tonal Dark Theme  -->
-    <!-- Seed: #0061A4 (Blue)  HCT color space           -->
-    <!-- ============================================== -->
+    <!-- primary neutral white theme -->
+    <color name="sys_primary">#FFFFFF</color>
+    <color name="sys_on_primary">#121212</color>
+    <color name="sys_primary_container">#252525</color>
+    <color name="sys_on_primary_container">#FFFFFF</color>
 
-    <!-- Primary (Apple White Minimalist Theme - No Blue Accent) -->
-    <color name="m3_primary">#FFFFFF</color>
-    <color name="m3_on_primary">#111318</color>
-    <color name="m3_primary_container">#272A2E</color>
-    <color name="m3_on_primary_container">#FFFFFF</color>
+    <!-- secondary -->
+    <color name="sys_secondary">#E5E5E5</color>
+    <color name="sys_on_secondary">#121212</color>
+    <color name="sys_secondary_container">#252525</color>
+    <color name="sys_on_secondary_container">#FFFFFF</color>
 
-    <!-- Secondary -->
-    <color name="m3_secondary">#E2E2E6</color>
-    <color name="m3_on_secondary">#111318</color>
-    <color name="m3_secondary_container">#272A2E</color>
-    <color name="m3_on_secondary_container">#FFFFFF</color>
+    <!-- tertiary -->
+    <color name="sys_tertiary">#E5E5E5</color>
+    <color name="sys_on_tertiary">#121212</color>
+    <color name="sys_tertiary_container">#252525</color>
+    <color name="sys_on_tertiary_container">#FFFFFF</color>
 
-    <!-- Tertiary -->
-    <color name="m3_tertiary">#E2E2E6</color>
-    <color name="m3_on_tertiary">#111318</color>
-    <color name="m3_tertiary_container">#272A2E</color>
-    <color name="m3_on_tertiary_container">#FFFFFF</color>
+    <!-- error -->
+    <color name="sys_error">#FF6B6B</color>
+    <color name="sys_on_error">#690005</color>
+    <color name="sys_error_container">#93000A</color>
+    <color name="sys_on_error_container">#FFDAD6</color>
 
-    <!-- Error -->
-    <color name="m3_error">#FFB4AB</color>
-    <color name="m3_on_error">#690005</color>
-    <color name="m3_error_container">#93000A</color>
-    <color name="m3_on_error_container">#FFDAD6</color>
+    <!-- neutral dark surfaces -->
+    <color name="sys_surface">#121212</color>
+    <color name="sys_surface_dim">#121212</color>
+    <color name="sys_surface_bright">#363636</color>
+    <color name="sys_surface_container_lowest">#0C0C0C</color>
+    <color name="sys_surface_container_low">#181818</color>
+    <color name="sys_surface_container">#1E1E1E</color>
+    <color name="sys_surface_container_high">#252525</color>
+    <color name="sys_surface_container_highest">#303030</color>
 
-    <!-- Surface -->
-    <color name="m3_surface">#111318</color>
-    <color name="m3_surface_dim">#111318</color>
-    <color name="m3_surface_bright">#36393E</color>
-    <color name="m3_surface_container_lowest">#0B0E13</color>
-    <color name="m3_surface_container_low">#191C20</color>
-    <color name="m3_surface_container">#1D2024</color>
-    <color name="m3_surface_container_high">#272A2E</color>
-    <color name="m3_surface_container_highest">#323539</color>
+    <!-- on surface -->
+    <color name="sys_on_surface">#E5E5E5</color>
+    <color name="sys_on_surface_variant">#C5C5C5</color>
 
-    <!-- On Surface -->
-    <color name="m3_on_surface">#E2E2E6</color>
-    <color name="m3_on_surface_variant">#C2C7CE</color>
+    <!-- outline -->
+    <color name="sys_outline">#8C8C8C</color>
+    <color name="sys_outline_variant">#404040</color>
 
-    <!-- Outline -->
-    <color name="m3_outline">#8A9198</color>
-    <color name="m3_outline_variant">#404850</color>
+    <!-- inverse -->
+    <color name="sys_inverse_surface">#E5E5E5</color>
+    <color name="sys_inverse_on_surface">#2E2E2E</color>
+    <color name="sys_inverse_primary">#FFFFFF</color>
 
-    <!-- Inverse -->
-    <color name="m3_inverse_surface">#E2E2E6</color>
-    <color name="m3_inverse_on_surface">#2F3135</color>
-    <color name="m3_inverse_primary">#FFFFFF</color>
+    <!-- scrim -->
+    <color name="sys_scrim">#000000</color>
+    <color name="sys_scrim_overlay">#CC000000</color>
 
-    <!-- Scrim -->
-    <color name="m3_scrim">#000000</color>
-    <color name="m3_scrim_overlay">#CC000000</color>
+    <!-- text colors -->
+    <color name="sys_text_primary">#E5E5E5</color>
+    <color name="sys_text_secondary">#C5C5C5</color>
+    <color name="sys_text_muted">#8C8C8C</color>
 
-    <!-- ============================================== -->
-    <!-- Semantic Aliases for Launcher Components       -->
-    <!-- ============================================== -->
+    <!-- focus outlines -->
+    <color name="sys_focus_ring">#FFFFFF</color>
+    <color name="sys_focus_halo">#35FFFFFF</color>
 
-    <!-- Text hierarchy (mapped to M3 on-surface roles) -->
-    <color name="m3_text_primary">#E2E2E6</color>
-    <color name="m3_text_secondary">#C2C7CE</color>
-    <color name="m3_text_muted">#8A9198</color>
+    <!-- chips and badges -->
+    <color name="sys_badge_bg">#252525</color>
+    <color name="sys_badge_text">#FFFFFF</color>
+    <color name="sys_chip_bg">#252525</color>
+    <color name="sys_chip_bg_focused">#35FFFFFF</color>
 
-    <!-- Focus Ring (M3 Primary) -->
-    <color name="m3_focus_ring">#FFFFFF</color>
-    <color name="m3_focus_halo">#35FFFFFF</color>
+    <!-- status colors -->
+    <color name="sys_status_green">#81C784</color>
+    <color name="sys_status_amber">#FFB74D</color>
+    <color name="sys_recents_scrim">#DD0C0C0C</color>
 
-    <!-- Chip / Badge (M3 Neutral) -->
-    <color name="m3_badge_bg">#272A2E</color>
-    <color name="m3_badge_text">#FFFFFF</color>
-    <color name="m3_chip_bg">#272A2E</color>
-    <color name="m3_chip_bg_focused">#35FFFFFF</color>
-
-    <!-- Status -->
-    <color name="m3_status_green">#81C784</color>
-    <color name="m3_status_amber">#FFB74D</color>
-    <color name="m3_recents_scrim">#DD0B0E13</color>
-
-    <!-- Compatibility Aliases -->
-    <color name="black">#111318</color>
-    <color name="dock_bg">#1D2024</color>
-    <color name="dock_border">#404850</color>
-    <color name="pill_bg">#272A2E</color>
+    <!-- component aliases -->
+    <color name="black">#121212</color>
+    <color name="dock_bg">#1E1E1E</color>
+    <color name="dock_border">#404040</color>
+    <color name="pill_bg">#252525</color>
     <color name="pill_bg_focused">#30FFFFFF</color>
-    <color name="text_primary">#E2E2E6</color>
-    <color name="text_secondary">#C2C7CE</color>
-    <color name="text_muted">#8A9198</color>
-    <color name="dropdown_bg">#323539</color>
+    <color name="text_primary">#E5E5E5</color>
+    <color name="text_secondary">#C5C5C5</color>
+    <color name="text_muted">#8C8C8C</color>
+    <color name="dropdown_bg">#303030</color>
 </resources>

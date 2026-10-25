@@ -15,7 +15,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <!-- M3 Expressive 16:9 Squircle Card Frame -->
+    <!-- Modern 16:9 Squircle Card Frame -->
     <FrameLayout
         android:id="@+id/card_frame"
         android:layout_width="160dp"
@@ -32,7 +32,7 @@
             android:scaleType="centerCrop" />
     </FrameLayout>
 
-    <!-- M3 Emphasized App Label with text shadow and bold typography -->
+    <!-- Smooth App Label with text shadow and bold typography -->
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
@@ -43,7 +43,7 @@
         android:gravity="center"
         android:maxLines="1"
         android:text="App Name"
-        android:textColor="@color/m3_text_primary"
+        android:textColor="@color/sys_text_primary"
         android:textSize="13sp"
         android:textStyle="bold"
         android:fontFamily="sans-serif-medium"

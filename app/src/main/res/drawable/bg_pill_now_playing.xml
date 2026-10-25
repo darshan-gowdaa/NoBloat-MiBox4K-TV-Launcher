@@ -32,7 +32,7 @@
         </shape>
     </item>
 
-    <!-- Default Unfocused: Apple VisionOS Liquid Glass with Top Specular Crest & Optical Acrylic Rim -->
+    <!-- Default Unfocused: Clean VisionOS Liquid Glass with Top Specular Crest & Optical Acrylic Rim -->
     <item>
         <layer-list>
             <!-- Caustic Base Shadow for Optical Glass Thickness -->
