@@ -7,33 +7,18 @@
 
     <!-- 16:9 Leanback Banner Background -->
     <path
-        android:fillColor="#10141D"
+        android:fillColor="#14161E"
         android:pathData="M0,0h320v180h-320z" />
 
-    <!-- Subtle Diagonal Tonal Accent -->
+    <!-- Frosted Glass Centered Card Plate -->
     <path
-        android:fillColor="#00497D"
-        android:pathData="M0,0L140,0L90,180L0,180z" />
+        android:fillColor="#12FFFFFF"
+        android:strokeColor="#25FFFFFF"
+        android:strokeWidth="1.5"
+        android:pathData="M100,40h120c6,0 12,6 12,12v76c0,6 -6,12 -12,12h-120c-6,0 -12,-6 -12,-12v-76c0,-6 6,-12 12,-12z" />
 
-    <!-- Centered TV Display Emblem -->
+    <!-- Centered Clean White Home Icon Emblem -->
     <path
-        android:fillColor="#1B2230"
-        android:strokeColor="#9ECAFF"
-        android:strokeWidth="3"
-        android:strokeLineJoin="round"
-        android:pathData="M110,40h100c4,0 8,4 8,8v64c0,4 -4,8 -8,8h-100c-4,0 -8,-4 -8,-8v-64c0,-4 4,-8 8,-8z" />
-
-    <!-- Home Icon Inside Display -->
-    <path
-        android:fillColor="#9ECAFF"
-        android:pathData="M160,56L138,74h8v24h28v-24h8z" />
-
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M156,84h8v8h-8z" />
-
-    <!-- TV Stand -->
-    <path
-        android:fillColor="#9ECAFF"
-        android:pathData="M152,120h16v6h-16z M144,126h32v4h-32z" />
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M160,58L132,82h8v28h14v-18h12v18h14v-28h8z" />
 </vector>

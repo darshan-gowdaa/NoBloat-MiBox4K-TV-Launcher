@@ -5,36 +5,20 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Material 3 Squircle Base -->
+    <!-- Premium Dark Frosted Squircle Background -->
     <path
-        android:fillColor="#10141D"
+        android:fillColor="#14161E"
         android:pathData="M18,6h72c6.6,0 12,5.4 12,12v72c0,6.6 -5.4,12 -12,12h-72c-6.6,0 -12,-5.4 -12,-12v-72c0,-6.6 5.4,-12 12,-12z" />
 
-    <!-- Tonal Primary Glow Container -->
+    <!-- Subtle Specular Inner Rim -->
     <path
-        android:fillColor="#00497D"
-        android:pathData="M24,14h60c5.5,0 10,4.5 10,10v60c0,5.5 -4.5,10 -10,10h-60c-5.5,0 -10,-4.5 -10,-10v-60c0,-5.5 4.5,-10 10,-10z" />
+        android:strokeColor="#25FFFFFF"
+        android:strokeWidth="1.5"
+        android:fillColor="#0DFFFFFF"
+        android:pathData="M22,10h64c5.5,0 10,4.5 10,10v68c0,5.5 -4.5,10 -10,10h-64c-5.5,0 -10,-4.5 -10,-10v-68c0,-5.5 4.5,-10 10,-10z" />
 
-    <!-- TV Display Frame Geometry -->
+    <!-- Home Icon Emblem -->
     <path
-        android:fillColor="#1B2230"
-        android:strokeColor="#9ECAFF"
-        android:strokeWidth="2.5"
-        android:strokeLineJoin="round"
-        android:pathData="M26,30h56c3.3,0 6,2.7 6,6v34c0,3.3 -2.7,6 -6,6h-56c-3.3,0 -6,-2.7 -6,-6v-34c0,-3.3 2.7,-6 6,-6z" />
-
-    <!-- Modern Expressive Home / TV Apex Emblem -->
-    <path
-        android:fillColor="#9ECAFF"
-        android:pathData="M54,40L38,53h6v17h20v-17h6z" />
-
-    <!-- Interior Accent Dot -->
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M51,60h6v6h-6z" />
-
-    <!-- TV Stand -->
-    <path
-        android:fillColor="#9ECAFF"
-        android:pathData="M48,76h12v4h-12z M42,80h24v3h-24z" />
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M54,26L26,50h8v28h14v-18h12v18h14v-28h8z" />
 </vector>
