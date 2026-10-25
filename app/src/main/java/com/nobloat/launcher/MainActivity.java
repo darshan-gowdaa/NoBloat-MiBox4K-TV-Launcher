@@ -46,7 +46,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -75,10 +77,14 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     private AmbientGradientView viewHeaderScrim;
     private ScrollView mainScroll;
     private GridLayout gridDock;
+    private View layoutFavoritesHeader;
+    private View dockShelf;
     private GridLayout gridApps;
 
     private MediaWidgetManager mediaWidgetManager;
     private int currentMediaDominantColor = 0;
+    private ColorExtractor.Palette currentMediaPalette = null;
+    private final Map<String, ColorExtractor.Palette> paletteCache = new HashMap<>();
     private BluetoothDialogManager bluetoothDialogManager;
     private SettingsDialogManager settingsDialogManager;
     private AppMenuDialogManager appMenuDialogManager;
@@ -234,7 +240,9 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                     if (tvFocusedAppTitle != null) {
                         tvFocusedAppTitle.setText("Now Playing");
                     }
-                    if (currentMediaDominantColor != 0) {
+                    if (currentMediaPalette != null) {
+                        animateAmbientGlow(currentMediaPalette);
+                    } else if (currentMediaDominantColor != 0) {
                         animateAmbientGlow(currentMediaDominantColor);
                     }
                     if (layoutNowPlaying != null) {
@@ -295,13 +303,20 @@ public class MainActivity extends Activity implements View.OnClickListener, View
             });
         }
         gridDock = findViewById(R.id.grid_dock);
+        layoutFavoritesHeader = findViewById(R.id.layout_favorites_header);
+        dockShelf = findViewById(R.id.dock_shelf);
         gridApps = findViewById(R.id.grid_apps);
 
         mediaWidgetManager = new MediaWidgetManager(this, rootLayout, new MediaWidgetManager.OnMediaColorListener() {
             @Override
-            public void onMediaColorExtracted(int dominantColor) {
+            public void onMediaColorExtracted(int dominantColor, ColorExtractor.Palette palette) {
                 currentMediaDominantColor = dominantColor;
-                animateAmbientGlow(dominantColor);
+                currentMediaPalette = palette;
+                if (palette != null) {
+                    animateAmbientGlow(palette);
+                } else {
+                    animateAmbientGlow(dominantColor);
+                }
             }
         });
 
@@ -419,6 +434,9 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                     @Override
                     public void onStartReordering(AppInfo app) {
                         View tile = findTileByPackage(gridDock, app.packageName);
+                        if (tile == null) {
+                            tile = findTileByPackage(gridApps, app.packageName);
+                        }
                         tileReorderManager.startReordering(app, tile);
                     }
                     @Override
@@ -468,6 +486,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         tileReorderManager = new TileReorderManager(
                 this,
                 gridDock,
+                gridApps,
                 appPrefsManager,
                 tvFocusedAppTitle,
                 emphasizedInterpolator,
@@ -756,8 +775,14 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                 info.banner = cached;
                 info.icon = cached;
                 info.isLoaded = true;
-                Integer dom = colorCache.get(pkg);
-                if (dom != null) info.dominantColor = dom;
+                ColorExtractor.Palette pal = paletteCache.get(pkg);
+                if (pal != null) {
+                    info.palette = pal;
+                    info.dominantColor = pal.dominantColor;
+                } else {
+                    Integer dom = colorCache.get(pkg);
+                    if (dom != null) info.dominantColor = dom;
+                }
             }
             allAppsMap.put(pkg, info);
         }
@@ -780,8 +805,14 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                 info.banner = cached;
                 info.icon = cached;
                 info.isLoaded = true;
-                Integer dom = colorCache.get(pkg);
-                if (dom != null) info.dominantColor = dom;
+                ColorExtractor.Palette pal = paletteCache.get(pkg);
+                if (pal != null) {
+                    info.palette = pal;
+                    info.dominantColor = pal.dominantColor;
+                } else {
+                    Integer dom = colorCache.get(pkg);
+                    if (dom != null) info.dominantColor = dom;
+                }
             }
             allAppsMap.put(pkg, info);
         }
@@ -789,7 +820,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         List<AppInfo> dockApps = new ArrayList<AppInfo>();
         List<AppInfo> remainingApps = new ArrayList<AppInfo>(allAppsMap.values());
 
-        // Fill dock based on user preferences order
+        // Fill dock based on user preferences order (no minimum, no maximum!)
         for (String favPkg : userFavorites) {
             if (allAppsMap.containsKey(favPkg)) {
                 AppInfo app = allAppsMap.get(favPkg);
@@ -800,17 +831,37 @@ public class MainActivity extends Activity implements View.OnClickListener, View
             }
         }
 
-        // Ensure dock is not empty if apps are available
-        while (dockApps.size() < columns && !remainingApps.isEmpty()) {
-            dockApps.add(remainingApps.remove(0));
+        // Custom order for All Apps
+        List<String> userCustomOrder = appPrefsManager.getCustomOrder();
+        List<AppInfo> sortedRemainingApps = new ArrayList<>();
+        if (!userCustomOrder.isEmpty()) {
+            for (String pkg : userCustomOrder) {
+                for (int i = 0; i < remainingApps.size(); i++) {
+                    if (remainingApps.get(i).packageName.equals(pkg)) {
+                        sortedRemainingApps.add(remainingApps.remove(i));
+                        break;
+                    }
+                }
+            }
+        }
+        Collections.sort(remainingApps, new AppComparator());
+        sortedRemainingApps.addAll(remainingApps);
+
+        // Dynamic visibility: Hide entire Favorites section when 0 apps!
+        if (dockApps.isEmpty()) {
+            if (layoutFavoritesHeader != null) layoutFavoritesHeader.setVisibility(View.GONE);
+            if (dockShelf != null) dockShelf.setVisibility(View.GONE);
+            gridDock.setVisibility(View.GONE);
+        } else {
+            if (layoutFavoritesHeader != null) layoutFavoritesHeader.setVisibility(View.VISIBLE);
+            if (dockShelf != null) dockShelf.setVisibility(View.VISIBLE);
+            gridDock.setVisibility(View.VISIBLE);
         }
 
-        Collections.sort(remainingApps, new AppComparator());
-
         populateGrid(gridDock, dockApps, true, columns);
-        populateGrid(gridApps, remainingApps, false, columns);
+        populateGrid(gridApps, sortedRemainingApps, false, columns);
 
-        linkDpadNavigation(dockApps.size(), remainingApps.size(), columns);
+        linkDpadNavigation(dockApps.size(), sortedRemainingApps.size(), columns);
 
         View focusTarget = null;
         if (lastMovedPackage != null) {
@@ -825,6 +876,8 @@ public class MainActivity extends Activity implements View.OnClickListener, View
             focusTarget.requestFocus();
         } else if (gridDock.getChildCount() > 0) {
             gridDock.getChildAt(0).requestFocus();
+        } else if (gridApps.getChildCount() > 0) {
+            gridApps.getChildAt(0).requestFocus();
         }
     }
 
@@ -900,10 +953,12 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                             app.icon = d;
                             app.isLoaded = true;
 
-                            int dom = ColorExtractor.extractDominantColor(d);
-                            if (dom != 0) {
-                                colorCache.put(app.packageName, dom);
-                                app.dominantColor = dom;
+                            ColorExtractor.Palette pal = ColorExtractor.extractPalette(d);
+                            if (pal != null) {
+                                paletteCache.put(app.packageName, pal);
+                                colorCache.put(app.packageName, pal.dominantColor);
+                                app.palette = pal;
+                                app.dominantColor = pal.dominantColor;
                             }
                         }
 
@@ -944,36 +999,56 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     }
 
     private void linkDpadNavigation(int dockCount, int gridCount, int columns) {
+        if (columns <= 0) columns = 5;
+
+        // 1. Grid Dock navigation
         for (int i = 0; i < dockCount; i++) {
             View tile = gridDock.getChildAt(i);
             if (tile == null) continue;
 
-            if (i > 0) {
+            int col = i % columns;
+            int row = i / columns;
+
+            // Horizontal
+            if (col > 0) {
                 tile.setNextFocusLeftId(gridDock.getChildAt(i - 1).getId());
             } else {
                 tile.setNextFocusLeftId(tile.getId());
             }
 
-            if (i < dockCount - 1) {
+            if (col < columns - 1 && (i + 1) < dockCount) {
                 tile.setNextFocusRightId(gridDock.getChildAt(i + 1).getId());
             } else {
                 tile.setNextFocusRightId(tile.getId());
             }
 
-            if (gridCount > 0) {
-                int targetDown = Math.min(i, gridCount - 1);
+            // Up
+            if (row > 0) {
+                tile.setNextFocusUpId(gridDock.getChildAt(i - columns).getId());
+            } else {
+                tile.setNextFocusUpId(tile.getId());
+            }
+
+            // Down
+            if (i + columns < dockCount) {
+                tile.setNextFocusDownId(gridDock.getChildAt(i + columns).getId());
+            } else if (gridCount > 0) {
+                int targetDown = Math.min(col, gridCount - 1);
                 tile.setNextFocusDownId(gridApps.getChildAt(targetDown).getId());
             } else {
                 tile.setNextFocusDownId(tile.getId());
             }
         }
 
+        // 2. Grid Apps navigation
         for (int i = 0; i < gridCount; i++) {
             View tile = gridApps.getChildAt(i);
             if (tile == null) continue;
 
             int col = i % columns;
+            int row = i / columns;
 
+            // Horizontal
             if (col > 0) {
                 tile.setNextFocusLeftId(gridApps.getChildAt(i - 1).getId());
             } else {
@@ -986,17 +1061,22 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                 tile.setNextFocusRightId(tile.getId());
             }
 
-            if (i >= columns) {
+            // Up
+            if (row > 0) {
                 tile.setNextFocusUpId(gridApps.getChildAt(i - columns).getId());
             } else {
-                int targetUp = Math.min(col, dockCount - 1);
-                if (targetUp >= 0 && targetUp < dockCount) {
+                // Row 0 of All Apps
+                if (dockCount > 0) {
+                    int totalDockRows = (dockCount + columns - 1) / columns;
+                    int lastRowStart = (totalDockRows - 1) * columns;
+                    int targetUp = Math.min(lastRowStart + col, dockCount - 1);
                     tile.setNextFocusUpId(gridDock.getChildAt(targetUp).getId());
                 } else {
                     tile.setNextFocusUpId(tile.getId());
                 }
             }
 
+            // Down
             if (i + columns < gridCount) {
                 tile.setNextFocusDownId(gridApps.getChildAt(i + columns).getId());
             } else {
@@ -1015,8 +1095,12 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                 if (tvFocusedAppTitle != null) {
                     tvFocusedAppTitle.setText(app.label);
                 }
-                int targetColor = (app.dominantColor != 0) ? app.dominantColor : 0x25FFFFFF;
-                animateAmbientGlow(targetColor);
+                if (app.palette != null) {
+                    animateAmbientGlow(app.palette);
+                } else {
+                    int targetColor = (app.dominantColor != 0) ? app.dominantColor : 0x25FFFFFF;
+                    animateAmbientGlow(targetColor);
+                }
             }
 
             v.animate()
@@ -1056,6 +1140,16 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         }
         if (viewHeaderScrim != null) {
             viewHeaderScrim.stopMotion();
+        }
+    }
+
+    private void animateAmbientGlow(ColorExtractor.Palette palette) {
+        if (palette == null) return;
+        if (ambientGradientView != null) {
+            ambientGradientView.setAppAccentPalette(palette, true);
+        }
+        if (viewHeaderScrim != null) {
+            viewHeaderScrim.setAppAccentPalette(palette, true);
         }
     }
 
@@ -1206,45 +1300,18 @@ public class MainActivity extends Activity implements View.OnClickListener, View
             View focused = getCurrentFocus();
 
             if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+
                 if (focused != null && isChildOf(gridDock, focused)) {
                     int idx = getChildIndex(gridDock, focused);
-                    if (layoutNowPlaying != null && layoutNowPlaying.getVisibility() == View.VISIBLE) {
-                        if (idx == 0) {
-                            btnWifi.requestFocus();
-                            return true;
-                        } else if (idx == 1) {
-                            btnBluetooth.requestFocus();
-                            return true;
-                        } else if (idx == 2) {
-                            if (btnNowPlayingArt != null) {
-                                btnNowPlayingArt.requestFocus();
-                                return true;
-                            }
-                        } else if (idx == 3) {
-                            if (btnNowPlayingPlay != null) {
-                                btnNowPlayingPlay.requestFocus();
-                                return true;
-                            }
-                        } else if (idx >= 4) {
-                            if (btnNowPlayingStop != null) {
-                                btnNowPlayingStop.requestFocus();
-                                return true;
-                            }
-                        }
-                    } else {
-                        if (idx == 0) {
-                            btnWifi.requestFocus();
-                            return true;
-                        } else if (idx == 1) {
-                            btnBluetooth.requestFocus();
-                            return true;
-                        } else if (idx == 2) {
-                            btnMetrics.requestFocus();
-                            return true;
-                        } else {
-                            btnSettings.requestFocus();
-                            return true;
-                        }
+                    if (idx < columns) {
+                        routeFocusUpToHeader(idx);
+                        return true;
+                    }
+                } else if (focused != null && isChildOf(gridApps, focused) && (gridDock == null || gridDock.getChildCount() == 0)) {
+                    int idx = getChildIndex(gridApps, focused);
+                    if (idx < columns) {
+                        routeFocusUpToHeader(idx);
+                        return true;
                     }
                 } else if (focused != null && (focused == btnNowPlayingArt || focused == btnNowPlayingPrev || focused == btnNowPlayingPlay || focused == btnNowPlayingNext || focused == btnNowPlayingStop)) {
                     if (focused == btnNowPlayingArt) {
@@ -1262,18 +1329,16 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                 if (focused != null) {
                     int id = focused.getId();
                     if (id == R.id.btn_wifi) {
-                        if (gridDock.getChildCount() > 0) {
-                            gridDock.getChildAt(0).requestFocus();
-                            return true;
-                        }
+                        routeFocusDownToContent(0);
+                        return true;
                     } else if (id == R.id.btn_bluetooth) {
                         if (layoutNowPlaying != null && layoutNowPlaying.getVisibility() == View.VISIBLE) {
                             if (btnNowPlayingArt != null) {
                                 btnNowPlayingArt.requestFocus();
                                 return true;
                             }
-                        } else if (gridDock.getChildCount() > 1) {
-                            gridDock.getChildAt(1).requestFocus();
+                        } else {
+                            routeFocusDownToContent(1);
                             return true;
                         }
                     } else if (id == R.id.btn_metrics) {
@@ -1282,8 +1347,8 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                                 btnNowPlayingPlay.requestFocus();
                                 return true;
                             }
-                        } else if (gridDock.getChildCount() > 2) {
-                            gridDock.getChildAt(2).requestFocus();
+                        } else {
+                            routeFocusDownToContent(2);
                             return true;
                         }
                     } else if (id == R.id.btn_settings) {
@@ -1292,25 +1357,57 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                                 btnNowPlayingStop.requestFocus();
                                 return true;
                             }
-                        } else if (gridDock.getChildCount() > 3) {
-                            gridDock.getChildAt(3).requestFocus();
+                        } else {
+                            routeFocusDownToContent(3);
                             return true;
                         }
                     } else if (focused == btnNowPlayingArt || focused == btnNowPlayingPrev || focused == btnNowPlayingPlay || focused == btnNowPlayingNext || focused == btnNowPlayingStop) {
-                        if (gridDock.getChildCount() > 0) {
-                            int targetIdx = 0;
-                            if (focused == btnNowPlayingArt) targetIdx = Math.min(2, gridDock.getChildCount() - 1);
-                            else if (focused == btnNowPlayingPrev || focused == btnNowPlayingPlay) targetIdx = Math.min(3, gridDock.getChildCount() - 1);
-                            else targetIdx = Math.min(4, gridDock.getChildCount() - 1);
-                            gridDock.getChildAt(targetIdx).requestFocus();
-                            return true;
-                        }
+                        int targetIdx = 0;
+                        if (focused == btnNowPlayingArt) targetIdx = 2;
+                        else if (focused == btnNowPlayingPrev || focused == btnNowPlayingPlay) targetIdx = 3;
+                        else targetIdx = 4;
+                        routeFocusDownToContent(targetIdx);
+                        return true;
                     }
                 }
             }
         }
 
         return super.dispatchKeyEvent(event);
+    }
+
+    private void routeFocusDownToContent(int preferredCol) {
+        if (gridDock != null && gridDock.getChildCount() > 0) {
+            int target = Math.min(preferredCol, gridDock.getChildCount() - 1);
+            gridDock.getChildAt(target).requestFocus();
+        } else if (gridApps != null && gridApps.getChildCount() > 0) {
+            int target = Math.min(preferredCol, gridApps.getChildCount() - 1);
+            gridApps.getChildAt(target).requestFocus();
+        }
+    }
+
+    private void routeFocusUpToHeader(int col) {
+        if (layoutNowPlaying != null && layoutNowPlaying.getVisibility() == View.VISIBLE) {
+            if (col == 0) {
+                btnWifi.requestFocus();
+            } else if (col == 1) {
+                btnBluetooth.requestFocus();
+            } else if (col == 2) {
+                if (btnNowPlayingArt != null) btnNowPlayingArt.requestFocus();
+                else btnBluetooth.requestFocus();
+            } else if (col == 3) {
+                if (btnNowPlayingPlay != null) btnNowPlayingPlay.requestFocus();
+                else btnMetrics.requestFocus();
+            } else {
+                if (btnNowPlayingStop != null) btnNowPlayingStop.requestFocus();
+                else btnSettings.requestFocus();
+            }
+        } else {
+            if (col == 0) btnWifi.requestFocus();
+            else if (col == 1) btnBluetooth.requestFocus();
+            else if (col == 2) btnMetrics.requestFocus();
+            else btnSettings.requestFocus();
+        }
     }
 
     private boolean isChildOf(ViewGroup parent, View child) {

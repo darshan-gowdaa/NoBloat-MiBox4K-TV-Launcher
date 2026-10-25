@@ -28,6 +28,7 @@ public class TileReorderManager {
 
     private final Activity activity;
     private final GridLayout gridDock;
+    private final GridLayout gridApps;
     private final AppPreferencesManager appPrefsManager;
     private final TextView tvFocusedAppTitle;
     private final PathInterpolator interpolator;
@@ -40,12 +41,14 @@ public class TileReorderManager {
 
     public TileReorderManager(Activity activity,
                               GridLayout gridDock,
+                              GridLayout gridApps,
                               AppPreferencesManager appPrefsManager,
                               TextView tvFocusedAppTitle,
                               PathInterpolator interpolator,
                               ReorderListener reorderListener) {
         this.activity = activity;
         this.gridDock = gridDock;
+        this.gridApps = gridApps;
         this.appPrefsManager = appPrefsManager;
         this.tvFocusedAppTitle = tvFocusedAppTitle;
         this.interpolator = interpolator;
@@ -65,29 +68,27 @@ public class TileReorderManager {
     }
 
     public void startReordering(AppInfo app, View tile) {
-        if (app == null) return;
+        if (app == null || tile == null) return;
         this.reorderingApp = app;
         this.isReorderingMode = true;
         this.reorderingView = tile;
 
-        if (reorderingView != null) {
-            reorderingView.requestFocus();
-            reorderingView.animate()
-                    .scaleX(1.18f)
-                    .scaleY(1.18f)
-                    .translationZ(UIUtils.dpToPx(activity, 20))
-                    .setDuration(180)
-                    .setInterpolator(interpolator)
-                    .start();
+        reorderingView.requestFocus();
+        reorderingView.animate()
+                .scaleX(1.18f)
+                .scaleY(1.18f)
+                .translationZ(UIUtils.dpToPx(activity, 20))
+                .setDuration(180)
+                .setInterpolator(interpolator)
+                .start();
 
-            PropertyValuesHolder sx = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.15f, 1.20f);
-            PropertyValuesHolder sy = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.15f, 1.20f);
-            reorderPulseAnimator = ObjectAnimator.ofPropertyValuesHolder(reorderingView, sx, sy);
-            reorderPulseAnimator.setDuration(450);
-            reorderPulseAnimator.setRepeatCount(ValueAnimator.INFINITE);
-            reorderPulseAnimator.setRepeatMode(ValueAnimator.REVERSE);
-            reorderPulseAnimator.start();
-        }
+        PropertyValuesHolder sx = PropertyValuesHolder.ofFloat(View.SCALE_X, 1.15f, 1.20f);
+        PropertyValuesHolder sy = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.15f, 1.20f);
+        reorderPulseAnimator = ObjectAnimator.ofPropertyValuesHolder(reorderingView, sx, sy);
+        reorderPulseAnimator.setDuration(450);
+        reorderPulseAnimator.setRepeatCount(ValueAnimator.INFINITE);
+        reorderPulseAnimator.setRepeatMode(ValueAnimator.REVERSE);
+        reorderPulseAnimator.start();
 
         if (tvFocusedAppTitle != null) {
             tvFocusedAppTitle.setText(app.label);
@@ -96,11 +97,14 @@ public class TileReorderManager {
     }
 
     public void moveTile(int direction) {
-        if (!isReorderingMode || reorderingView == null || gridDock == null) return;
-        int curr = gridDock.indexOfChild(reorderingView);
+        if (!isReorderingMode || reorderingView == null) return;
+        GridLayout targetGrid = (reorderingView.getParent() == gridDock) ? gridDock : gridApps;
+        if (targetGrid == null) return;
+
+        int curr = targetGrid.indexOfChild(reorderingView);
         if (curr < 0) return;
         int target = curr + direction;
-        if (target < 0 || target >= gridDock.getChildCount()) {
+        if (target < 0 || target >= targetGrid.getChildCount()) {
             reorderingView.animate()
                     .translationX(direction * UIUtils.dpToPx(activity, 8))
                     .setDuration(70)
@@ -116,9 +120,9 @@ public class TileReorderManager {
             return;
         }
 
-        gridDock.removeView(reorderingView);
-        gridDock.addView(reorderingView, target);
-        gridDock.requestLayout();
+        targetGrid.removeView(reorderingView);
+        targetGrid.addView(reorderingView, target);
+        targetGrid.requestLayout();
         reorderingView.requestFocus();
 
         try {
@@ -152,17 +156,22 @@ public class TileReorderManager {
             reorderingView.requestFocus();
         }
 
-        if (gridDock != null && appPrefsManager != null) {
-            List<String> newFavs = new ArrayList<String>();
-            for (int i = 0; i < gridDock.getChildCount(); i++) {
-                View child = gridDock.getChildAt(i);
+        GridLayout targetGrid = (reorderingView != null && reorderingView.getParent() == gridDock) ? gridDock : gridApps;
+        if (targetGrid != null && appPrefsManager != null) {
+            List<String> pkgList = new ArrayList<String>();
+            for (int i = 0; i < targetGrid.getChildCount(); i++) {
+                View child = targetGrid.getChildAt(i);
                 Object tag = child.getTag();
                 if (tag instanceof AppInfo) {
-                    newFavs.add(((AppInfo) tag).packageName);
+                    pkgList.add(((AppInfo) tag).packageName);
                 }
             }
-            if (!newFavs.isEmpty()) {
-                appPrefsManager.saveFavorites(newFavs);
+            if (!pkgList.isEmpty()) {
+                if (targetGrid == gridDock) {
+                    appPrefsManager.saveFavorites(pkgList);
+                } else {
+                    appPrefsManager.saveCustomOrder(pkgList);
+                }
             }
         }
     }

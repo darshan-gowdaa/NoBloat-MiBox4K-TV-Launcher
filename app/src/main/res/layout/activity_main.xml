@@ -38,6 +38,7 @@
 
             <!-- Section 1: Favorites / Pinned Row -->
             <LinearLayout
+                android:id="@+id/layout_favorites_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -750,13 +751,13 @@
                     android:id="@+id/menu_app_icon_frame"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="@drawable/bg_tile_card">
+                    android:background="@drawable/bg_round_icon">
 
                     <ImageView
                         android:id="@+id/menu_app_icon"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:scaleType="fitCenter" />
+                        android:scaleType="centerCrop" />
                 </FrameLayout>
 
                 <LinearLayout

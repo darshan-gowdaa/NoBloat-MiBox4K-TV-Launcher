@@ -21,8 +21,11 @@ public class AppPreferencesManager {
 
     public List<String> getFavorites(String[] defaultDock) {
         String raw = prefs.getString(KEY_FAVORITES, null);
-        if (raw == null || raw.trim().isEmpty()) {
-            return new ArrayList<String>(Arrays.asList(defaultDock));
+        if (raw == null) {
+            return (defaultDock != null) ? new ArrayList<String>(Arrays.asList(defaultDock)) : new ArrayList<String>();
+        }
+        if (raw.trim().isEmpty()) {
+            return new ArrayList<String>();
         }
         List<String> list = new ArrayList<String>();
         String[] parts = raw.split(",");
@@ -36,12 +39,45 @@ public class AppPreferencesManager {
     }
 
     public void saveFavorites(List<String> list) {
+        if (list == null || list.isEmpty()) {
+            prefs.edit().putString(KEY_FAVORITES, "").apply();
+            return;
+        }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
             if (i > 0) sb.append(",");
             sb.append(list.get(i));
         }
         prefs.edit().putString(KEY_FAVORITES, sb.toString()).apply();
+    }
+
+    public List<String> getCustomOrder() {
+        String raw = prefs.getString(KEY_CUSTOM_ORDER, null);
+        if (raw == null || raw.trim().isEmpty()) {
+            return new ArrayList<String>();
+        }
+        List<String> list = new ArrayList<String>();
+        String[] parts = raw.split(",");
+        for (String p : parts) {
+            p = p.trim();
+            if (!p.isEmpty() && !list.contains(p)) {
+                list.add(p);
+            }
+        }
+        return list;
+    }
+
+    public void saveCustomOrder(List<String> list) {
+        if (list == null || list.isEmpty()) {
+            prefs.edit().putString(KEY_CUSTOM_ORDER, "").apply();
+            return;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            if (i > 0) sb.append(",");
+            sb.append(list.get(i));
+        }
+        prefs.edit().putString(KEY_CUSTOM_ORDER, sb.toString()).apply();
     }
 
     public boolean moveInFavorites(String pkg, int direction, String[] defaultDock) {

@@ -14,8 +14,12 @@ public class TimeTickReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (activity != null) {
-            activity.updateTimeAndGreeting();
-            activity.updateWifiSsid();
+            try {
+                activity.updateTimeAndGreeting();
+            } catch (Throwable ignored) {}
+            try {
+                activity.updateWifiSsid();
+            } catch (Throwable ignored) {}
         }
     }
 }

@@ -161,6 +161,27 @@ public class AmbientGradientView extends View {
         return currentBaseColor;
     }
 
+    public void setAppAccentPalette(ColorExtractor.Palette palette, boolean animate) {
+        if (palette == null) return;
+        setAppAccentPaletteInternal(palette, animate, true);
+    }
+
+    private void setAppAccentPaletteInternal(ColorExtractor.Palette palette, boolean animate, boolean broadcast) {
+        sLastAccentColor = palette.dominantColor;
+        if (broadcast) {
+            for (int i = sInstances.size() - 1; i >= 0; i--) {
+                AmbientGradientView v = sInstances.get(i).get();
+                if (v == null) {
+                    sInstances.remove(i);
+                } else if (v != this) {
+                    v.setAppAccentPaletteInternal(palette, animate, false);
+                }
+            }
+        }
+
+        applyColors(palette.baseColor, palette.orbColors[0], palette.orbColors[1], palette.orbColors[2], palette.orbColors[3], animate);
+    }
+
     public void setAppAccentColor(int focusColor, boolean animate) {
         setAppAccentColorInternal(focusColor, animate, true);
     }
@@ -183,60 +204,55 @@ public class AmbientGradientView extends View {
         float rawS = hsvBuffer[1];
         float rawV = hsvBuffer[2];
 
-        // check if monochrome
-        final boolean isMonochrome = (rawS < 0.08f);
+        int newBase;
+        int newOrb1, newOrb2, newOrb3, newOrb4;
 
-        // check if warm color
-        final boolean isWarmEarth = (!isMonochrome && rawH >= 12.0f && rawH <= 45.0f);
-
-        float targetH;
-        float targetS;
-        float targetV;
-
-        if (isMonochrome) {
-            // neutral dark silver tones for monochrome art
-            targetH = 210.0f;
-            targetS = 0.06f;
-            targetV = 0.35f;
-        } else if (isWarmEarth) {
-            targetH = rawH;
-            targetS = Math.max(0.55f, Math.min(0.85f, rawS * 1.15f));
-            targetV = Math.max(0.50f, Math.min(0.80f, rawV * 1.20f));
+        if (rawS < 0.12f) {
+            // Strictly neutral monochrome: NEVER inject blue!
+            newBase = Color.rgb(10, 10, 10);
+            newOrb1 = Color.rgb(225, 225, 225);
+            newOrb2 = Color.rgb(55, 55, 55);
+            newOrb3 = Color.rgb(115, 115, 115);
+            newOrb4 = Color.rgb(25, 25, 25);
         } else {
-            targetH = rawH;
-            targetS = Math.max(0.65f, Math.min(0.95f, rawS * 1.20f));
-            targetV = Math.max(0.72f, Math.min(0.96f, rawV * 1.15f));
+            // Chromatic
+            float targetH = rawH;
+            float targetS = Math.max(0.65f, Math.min(0.95f, rawS * 1.20f));
+            float targetV = Math.max(0.72f, Math.min(0.96f, rawV * 1.15f));
+
+            float hShift1 = (targetH + 18.0f) % 360.0f;
+            float hShift2 = (targetH - 15.0f + 360.0f) % 360.0f;
+
+            colorHsvBuffer[0] = targetH;
+            colorHsvBuffer[1] = Math.min(targetS * 0.50f, 0.35f);
+            colorHsvBuffer[2] = 0.16f;
+            newBase = Color.HSVToColor(colorHsvBuffer);
+
+            colorHsvBuffer[0] = targetH;
+            colorHsvBuffer[1] = targetS;
+            colorHsvBuffer[2] = targetV;
+            newOrb1 = Color.HSVToColor(colorHsvBuffer);
+
+            colorHsvBuffer[0] = hShift1;
+            colorHsvBuffer[1] = targetS * 0.85f;
+            colorHsvBuffer[2] = Math.min(0.92f, targetV * 0.92f);
+            newOrb2 = Color.HSVToColor(colorHsvBuffer);
+
+            colorHsvBuffer[0] = hShift2;
+            colorHsvBuffer[1] = Math.min(1.0f, targetS * 1.05f);
+            colorHsvBuffer[2] = Math.max(0.35f, targetV * 0.75f);
+            newOrb3 = Color.HSVToColor(colorHsvBuffer);
+
+            colorHsvBuffer[0] = targetH;
+            colorHsvBuffer[1] = targetS * 0.75f;
+            colorHsvBuffer[2] = Math.min(0.88f, targetV * 0.85f);
+            newOrb4 = Color.HSVToColor(colorHsvBuffer);
         }
 
-        // secondary orb color shifts
-        float hShift1 = isMonochrome ? 210.0f : ((targetH + 18.0f) % 360.0f);
-        float hShift2 = isMonochrome ? 210.0f : ((targetH - 15.0f + 360.0f) % 360.0f);
+        applyColors(newBase, newOrb1, newOrb2, newOrb3, newOrb4, animate);
+    }
 
-        colorHsvBuffer[0] = targetH;
-        colorHsvBuffer[1] = Math.min(targetS * 0.50f, 0.35f);
-        colorHsvBuffer[2] = isMonochrome ? 0.08f : 0.16f;
-        int newBase = Color.HSVToColor(colorHsvBuffer);
-
-        colorHsvBuffer[0] = targetH;
-        colorHsvBuffer[1] = targetS;
-        colorHsvBuffer[2] = targetV;
-        int newOrb1 = Color.HSVToColor(colorHsvBuffer);
-
-        colorHsvBuffer[0] = hShift1;
-        colorHsvBuffer[1] = targetS * 0.85f;
-        colorHsvBuffer[2] = Math.min(0.92f, targetV * 0.92f);
-        int newOrb2 = Color.HSVToColor(colorHsvBuffer);
-
-        colorHsvBuffer[0] = hShift2;
-        colorHsvBuffer[1] = Math.min(1.0f, targetS * 1.05f);
-        colorHsvBuffer[2] = Math.max(0.35f, targetV * 0.75f);
-        int newOrb3 = Color.HSVToColor(colorHsvBuffer);
-
-        colorHsvBuffer[0] = targetH;
-        colorHsvBuffer[1] = targetS * 0.75f;
-        colorHsvBuffer[2] = Math.min(0.88f, targetV * 0.85f);
-        int newOrb4 = Color.HSVToColor(colorHsvBuffer);
-
+    private void applyColors(int newBase, int newOrb1, int newOrb2, int newOrb3, int newOrb4, boolean animate) {
         if (!animate) {
             currentBaseColor = newBase;
             currentOrbColors[0] = newOrb1;

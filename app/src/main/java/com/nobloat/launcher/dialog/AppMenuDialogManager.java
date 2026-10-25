@@ -102,7 +102,16 @@ public class AppMenuDialogManager {
             iconFrame.setOutlineProvider(new ViewOutlineProvider() {
                 @Override
                 public void getOutline(View view, Outline outline) {
-                    outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), UIUtils.dpToPx(activity, 12));
+                    outline.setOval(0, 0, view.getWidth(), view.getHeight());
+                }
+            });
+        }
+        if (menuAppIcon != null) {
+            menuAppIcon.setClipToOutline(true);
+            menuAppIcon.setOutlineProvider(new ViewOutlineProvider() {
+                @Override
+                public void getOutline(View view, Outline outline) {
+                    outline.setOval(0, 0, view.getWidth(), view.getHeight());
                 }
             });
         }
@@ -264,16 +273,8 @@ public class AppMenuDialogManager {
         }
 
         if (appIconDrawable != null && menuAppIcon != null) {
-            int w = appIconDrawable.getIntrinsicWidth();
-            int h = appIconDrawable.getIntrinsicHeight();
-            if (w > 0 && h > 0 && (float) w / (float) h > 1.3f) {
-                menuAppIcon.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                menuAppIcon.setPadding(0, 0, 0, 0);
-            } else {
-                menuAppIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                int pad = UIUtils.dpToPx(activity, 3);
-                menuAppIcon.setPadding(pad, pad, pad, pad);
-            }
+            menuAppIcon.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            menuAppIcon.setPadding(0, 0, 0, 0);
             menuAppIcon.setImageDrawable(appIconDrawable);
         }
         menuAppTitle.setText(app.label);
@@ -286,21 +287,19 @@ public class AppMenuDialogManager {
 
         if (isDock) {
             btnMenuTogglePin.setText("Remove from Favorites");
-            if (btnMenuMove != null) {
-                btnMenuMove.setVisibility(View.VISIBLE);
-                btnMenuMove.setNextFocusUpId(R.id.btn_menu_open);
-                btnMenuMove.setNextFocusDownId(R.id.btn_menu_toggle_pin);
-                btnMenuMove.setNextFocusLeftId(R.id.btn_menu_move);
-                btnMenuMove.setNextFocusRightId(R.id.btn_menu_move);
-            }
-            btnMenuOpen.setNextFocusDownId(R.id.btn_menu_move);
-            btnMenuTogglePin.setNextFocusUpId(R.id.btn_menu_move);
         } else {
             btnMenuTogglePin.setText("Pin to Favorites");
-            if (btnMenuMove != null) btnMenuMove.setVisibility(View.GONE);
-            btnMenuOpen.setNextFocusDownId(R.id.btn_menu_toggle_pin);
-            btnMenuTogglePin.setNextFocusUpId(R.id.btn_menu_open);
         }
+
+        if (btnMenuMove != null) {
+            btnMenuMove.setVisibility(View.VISIBLE);
+            btnMenuMove.setNextFocusUpId(R.id.btn_menu_open);
+            btnMenuMove.setNextFocusDownId(R.id.btn_menu_toggle_pin);
+            btnMenuMove.setNextFocusLeftId(R.id.btn_menu_move);
+            btnMenuMove.setNextFocusRightId(R.id.btn_menu_move);
+        }
+        btnMenuOpen.setNextFocusDownId(R.id.btn_menu_move);
+        btnMenuTogglePin.setNextFocusUpId(R.id.btn_menu_move);
 
         btnMenuTogglePin.setNextFocusLeftId(R.id.btn_menu_toggle_pin);
         btnMenuTogglePin.setNextFocusRightId(R.id.btn_menu_toggle_pin);

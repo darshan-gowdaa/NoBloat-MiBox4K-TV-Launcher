@@ -11,7 +11,8 @@ public class AppInfo {
     public Drawable banner = null;
     public Drawable icon = null;
     public boolean isBanner = false;
-    public int dominantColor = 0x3300497D;
+    public int dominantColor = 0xFF141922;
+    public ColorExtractor.Palette palette = null;
     public volatile boolean isLoaded = false;
     public Intent launchIntent = null;
 

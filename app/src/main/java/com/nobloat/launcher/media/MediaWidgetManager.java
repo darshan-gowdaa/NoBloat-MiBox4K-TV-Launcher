@@ -25,7 +25,7 @@ import java.util.List;
 public class MediaWidgetManager {
 
     public interface OnMediaColorListener {
-        void onMediaColorExtracted(int dominantColor);
+        void onMediaColorExtracted(int dominantColor, ColorExtractor.Palette palette);
     }
 
     private final Context context;
@@ -61,6 +61,10 @@ public class MediaWidgetManager {
     private String lastArtistSub = null;
     private int lastPlaybackState = -1;
     private int currentDominantColor = 0;
+    private ColorExtractor.Palette currentPalette = null;
+    public ColorExtractor.Palette getCurrentPalette() {
+        return currentPalette;
+    }
 
     public int getCurrentDominantColor() {
         return currentDominantColor;
@@ -457,7 +461,7 @@ public class MediaWidgetManager {
             if (trackSig.equals(lastLoadedTrackSignature)) {
                 if (hasArtContent || (pendingArtTask != null && !pendingArtTask.isDone())) {
                     if (colorListener != null && currentDominantColor != 0) {
-                        colorListener.onMediaColorExtracted(currentDominantColor);
+                        colorListener.onMediaColorExtracted(currentDominantColor, currentPalette);
                     }
                     return;
                 }
@@ -714,7 +718,7 @@ public class MediaWidgetManager {
                     && art.getHeight() == lastSourceArt.getHeight()
                     && art.getGenerationId() == lastSourceArt.getGenerationId())) {
                 if (colorListener != null && currentDominantColor != 0) {
-                    colorListener.onMediaColorExtracted(currentDominantColor);
+                    colorListener.onMediaColorExtracted(currentDominantColor, currentPalette);
                 }
                 return;
             }
@@ -774,11 +778,12 @@ public class MediaWidgetManager {
         if (equalizerView != null) {
             equalizerView.setBarColor(0xFFFFFFFF);
         }
-        int domColor = ColorExtractor.extractDominantColor(displayArt);
-        if (domColor != 0) {
-            currentDominantColor = domColor;
+        ColorExtractor.Palette pal = ColorExtractor.extractPalette(displayArt);
+        if (pal != null) {
+            currentPalette = pal;
+            currentDominantColor = pal.dominantColor;
             if (colorListener != null) {
-                colorListener.onMediaColorExtracted(domColor);
+                colorListener.onMediaColorExtracted(currentDominantColor, pal);
             }
         }
     }
@@ -844,11 +849,12 @@ public class MediaWidgetManager {
             if (activeController != null) {
                 String pkg = activeController.getPackageName();
                 android.graphics.drawable.Drawable appIcon = packageManager.getApplicationIcon(pkg);
-                int appColor = ColorExtractor.extractDominantColor(appIcon);
-                if (appColor != 0) {
-                    currentDominantColor = appColor;
+                ColorExtractor.Palette pal = ColorExtractor.extractPalette(appIcon);
+                if (pal != null) {
+                    currentPalette = pal;
+                    currentDominantColor = pal.dominantColor;
                     if (colorListener != null) {
-                        colorListener.onMediaColorExtracted(appColor);
+                        colorListener.onMediaColorExtracted(currentDominantColor, pal);
                     }
                 }
             }
